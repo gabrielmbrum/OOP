@@ -6,7 +6,7 @@ import CommerceTechGear.DisplayLoja;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Loja {
+public class Loja extends Categoria {
     // fields
     private String nome;
     private String cnpj;

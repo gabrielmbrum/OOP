@@ -1,6 +1,6 @@
 package CommerceTechGear;
 
-public class DisplayLoja {
+public class DisplayLoja extends Loja {
     // fields
     private Loja loja;
 
