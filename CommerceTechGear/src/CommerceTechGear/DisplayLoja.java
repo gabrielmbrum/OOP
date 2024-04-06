@@ -5,6 +5,9 @@ public class DisplayLoja {
     private Loja loja;
 
     // constructor
+    public DisplayLoja () {
+        this(new Loja());
+    }
     public DisplayLoja (Loja loja) {
         this.loja = loja;
     }
@@ -24,7 +27,7 @@ public class DisplayLoja {
         System.out.println("Tela Usuário");
     }
     void buscarProdutos() {};
-    void adicionarAoCarrinho() {};
+    void adicionarAoCarrinho(Produto produto) {};
     void realizarCompra() {};
     void gerenciarCategorias() {};
     void gerenciarProdutos() {};

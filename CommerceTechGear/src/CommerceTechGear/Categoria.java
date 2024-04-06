@@ -28,7 +28,6 @@ public class Categoria {
     }
 
     // getters and setters
-
     public int getCodigo() {
         return codigo;
     }

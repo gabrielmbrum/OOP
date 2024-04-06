@@ -6,7 +6,7 @@ import CommerceTechGear.DisplayLoja;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Loja{
+public class Loja {
     // fields
     private String nome;
     private String cnpj;
@@ -14,6 +14,9 @@ public class Loja{
     private List<Categoria> categorias;
 
     // constructor
+    public Loja () {
+        this("loja");
+    }
     public Loja(String nome) {
         this(nome, "null", "null", new ArrayList<>());
     }
@@ -58,7 +61,6 @@ public class Loja{
     }
 
     // required methods
-
     public void adicionarCategoria(Categoria categoria) {
         categorias.add(categoria);
     };
