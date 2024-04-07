@@ -1,16 +1,19 @@
 package CommerceTechGear;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class DisplayLoja extends Loja {
     // campos
     private Loja loja;
     private Admin admin;
+    private Carrinho carrinho;
 
     // construtores
-    public DisplayLoja (Loja loja, Admin admin) {
+    public DisplayLoja (Loja loja, Admin admin, Carrinho carrinho) {
         this.loja = loja;
         this.admin = admin;
+        this.carrinho = carrinho;
     }
 
     // getter and setter
@@ -21,6 +24,12 @@ public class DisplayLoja extends Loja {
     public void setLoja(Loja loja) {
         this.loja = loja;
     }
+
+    public Admin getAdmin () {return admin;}
+
+    public Carrinho getCarrinho () {return carrinho;}
+
+    public void setCarrinho (Carrinho carrinho) {this.carrinho = carrinho;}
 
     // métodos
     public void telaPrincipal() {
