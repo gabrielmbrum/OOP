@@ -2,7 +2,7 @@ package CommerceTechGear;
 
 import CommerceTechGear.Categoria;
 
-public abstract class Produto extends Categoria {
+public abstract class Produto {
     // fields
     private int id;
     private String nome;
