@@ -46,35 +46,34 @@ public class DisplayLoja extends Loja {
     }
 
     public void telaUsuario() {
-        int op;
+        int op = 1;
 
+        System.out.println("\n====================||===========||=================\n");
         System.out.println("\t\tSeja Bem-Vind@ ao Commerce TechGear!!");
 
-        telaOpcoesUsuario();
-        op = Main.sc.nextInt();
-        Main.sc.nextLine();
 
-        while (op < 0 || op > 5) {
-            System.out.println("Operação Inválida!!!");
+        while (op != 0) {
             telaOpcoesUsuario();
-            System.out.print("Digite novamente a operação: ");
             op = Main.sc.nextInt();
             Main.sc.nextLine();
+
+            switch (op) {
+                case 0: return;
+                case 1: buscarProdutos(); break;
+                case 2: break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                default:
+                    System.out.println("\tOperação Inválida!!");
+            }
         }
 
-        switch (op) {
-            case 0: return;
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-        }
+        //(1) Buscar Produto\n\t(2) Visualizar Carrinho\n\t(3) Remover item do Carrinho\n\t(4) Realizar Compra\n\t(5) Listar Produtos(0) Sair");
+
     }
     public void telaAdmin() {
         // campos
@@ -121,7 +120,58 @@ public class DisplayLoja extends Loja {
         }
     }
 
-    void buscarProdutos() {};
+    void buscarProdutos() {
+        int op = 1;
+        Produto produto;
+
+        System.out.println("\n====================||===========||=================\n");
+
+        while (op != 0) {
+            System.out.println("\nDeseja buscar produto pelo:\n\t(1) Nome\n\t(2) ID\n\t(0) Sair");
+            System.out.println("OPERAÇÃO: ");
+            op = Main.sc.nextInt();
+            Main.sc.nextLine();
+            switch (op) {
+                case 1:
+                    System.out.print("\nDigite o nome: ");
+                    String nome = Main.sc.nextLine();
+                    produto = buscarProduto(nome);
+                    verificaProduto(produto);
+                    break;
+
+                case 2:
+                    System.out.print("Digite o id: ");
+                    int id = Main.sc.nextInt();
+                    Main.sc.nextLine();
+
+                    produto = buscarProduto(id);
+
+                    verificaProduto(produto);
+                    break;
+                case 0: return;
+            }
+        }
+
+    }
+
+    private void verificaProduto(Produto produto) {
+        if (produto != null) {
+            char c = 'c';
+
+            System.out.print("Produto encontrado: " + produto.getNome() + " | Preço: ");
+            System.out.format(" %.2f\n", produto.getPreco());
+
+            while (c != 'S' && c != 's' && c != 'N' && c != 'n') {
+                System.out.println("Adicionar ao carrinho? <S/N>");
+                System.out.print("R: ");
+                c = Main.sc.next().charAt(0);
+            }
+
+            if (c == 'S' || c == 's')
+                adicionarAoCarrinho(produto);
+        } else
+            System.out.println("Produto não encontrado! :(");
+    }
 
     void adicionarAoCarrinho(Produto produto) {};
 
@@ -154,7 +204,7 @@ public class DisplayLoja extends Loja {
 
     public void telaOpcoesUsuario () {
         System.out.println("Digite qual operação você deseja realizar:");
-        System.out.println("\t(1) Buscar Produto\n\t(2) Adicionar Produto ao Carrinho\n\t(3) Visualizar Carrinho\n\t(4) Remover item do Carrinho\n\t(5) Realizar Compra\n\t(0) Sair");
+        System.out.println("\t(1) Buscar Produto\n\t(2) Adicionar Produto ao Carrinho\n\t(3) Visualizar Carrinho\n\t(4) Remover item do Carrinho\n\t(5) Realizar Compra\n\t(6) Listar Produtos\n\t(0) Sair");
         System.out.print("\nOPERAÇÃO: ");
     }
 

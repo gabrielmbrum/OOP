@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 public class Main {
     public static Scanner sc = new Scanner(System.in);
     public static void main(String[] args) {
+        // creating objects
         Admin admin = new Admin("12345678911", "admin", "admin");
         Loja loja = new Loja("TechGear");
         DisplayLoja display = new DisplayLoja(loja, admin);
