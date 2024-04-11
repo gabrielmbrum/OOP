@@ -1,9 +1,7 @@
-package CommerceTechGear;
+package techgear;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.sql.SQLOutput;
-import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,14 +12,14 @@ public class DisplayLoja extends Loja {
     private Admin admin;
     private Carrinho carrinho;
 
-    // construtores
+    // construtor
     public DisplayLoja (Loja loja, Admin admin, Carrinho carrinho) {
         this.loja = loja;
         this.admin = admin;
         this.carrinho = carrinho;
     }
 
-    // getter and setter
+    // getters and setters
     public Loja getLoja() {
         return loja;
     }
@@ -43,7 +41,7 @@ public class DisplayLoja extends Loja {
         System.out.println("BEM VINDO!!!");
 
         while (op != 0) {
-            System.out.println("\nQual tela deseja utilizar?");
+            System.err.println("\nQual tela deseja utilizar?");
             System.out.println("\t(1) Tela Usuario\n\t(2) Tela Administrador\n\t(0) Encerrar programa :(");
             System.out.print("R: ");
             op = Main.sc.nextInt();
@@ -74,9 +72,8 @@ public class DisplayLoja extends Loja {
             switch (op) {
                 case 0: return;
                 case 1: buscarProdutos(); break;
-                case 2: visualizarCarrinho(); break;
-                case 3:
-                    break;
+                case 2: break;
+                case 3: visualizarCarrinho(); break;
                 case 4:
                     break;
                 case 5:
@@ -128,71 +125,8 @@ public class DisplayLoja extends Loja {
         switch (op) {
             case 0: return;
             case 1:
-                while (op!=0) {
-                    System.out.println("\nO que deseja fazer?\n\t(1) Adicionar Produto (via Arquivo)\n\t(2) Adicionar Produto (manualmente)\n\t(3) Remover Produto\n\t(4) Listar Produtos\n\t(0) Voltar");
-                    System.out.print("OPERAÇÃO: ");
-                    op = Main.sc.nextInt();
-                    Main.sc.nextLine();
-
-                    switch (op) {
-                        case 1:
-                            File arquivo;
-                            Scanner scanner;
-                            String path, linha;
-                            String[] campos;
-
-                            System.out.print("\nDigite o caminho para o arquivo: ");
-                            path = Main.sc.nextLine();
-
-                            arquivo = new File(path);
-
-                            // confere se o arquivo foi aberto corretamente
-                            try {
-                                scanner = new Scanner(arquivo);
-                            } catch (FileNotFoundException ex) {
-                                Logger.getLogger(DisplayLoja.class.getName()).log(Level.SEVERE, null, ex);
-                                return;
-                            }
-
-                            while (scanner.hasNextLine()) {
-                                linha = scanner.nextLine();
-                                campos = linha.split("#");
-                                Categoria categoria = buscarCategoria(Integer.parseInt(campos[5]));
-
-                                // confere se a categoria do produto é existente
-                                if (categoria == null) {
-                                    System.out.println("Categoria do produto de ID " + campos[0] + " não encontrada!!!");
-                                } else {
-                                    if (campos[6].contains("GB")) { // é um produto virtual
-
-                                        // retira o GB para implementação do atributo do produto
-                                        String[] parts = campos[6].split(" ");
-                                        campos[6] = parts[0];
-
-                                        ProdutoVirtual produtoVirtual = new ProdutoVirtual(Integer.parseInt(campos[0]), campos[1], Double.parseDouble(campos[2]), campos[3], campos[4], categoria, Double.parseDouble(campos[6]), campos[7])
-
-                                        if (adicionarProduto(produtoVirtual))
-                                            System.out.println("Produto adicionado com sucesso!!");
-                                        else
-                                            System.out.println("Produto já existente!!!");
-
-                                    } else { // é um produto físico
-
-                                        ProdutoFisico produtoFisico = new ProdutoFisico(Integer.parseInt(campos[0]), campos[1], Double.parseDouble(campos[2]), campos[3], campos[4], categoria, Double.parseDouble(campos[6]), campos[7]);
-
-                                        if (adicionarProduto(produtoFisico))
-                                            System.out.println("Produto adicionado com sucesso!!");
-                                        else
-                                            System.out.println("Produto já existente!!!");
-                                    }
-                                }
-
-
-                            }
-
-                    }
-                }
-
+                gerenciarProdutos(op);
+                break;
 
             case 2:
             case 3:
@@ -261,8 +195,146 @@ public class DisplayLoja extends Loja {
 
     void gerenciarCategorias() {};
 
-    void gerenciarProdutos() {};
+    void gerenciarProdutos(int op) {
+        while (op!=0) {
+            System.out.println("\nO que deseja fazer?\n\t(1) Adicionar Produto (via Arquivo)\n\t(2) Adicionar Produto (manualmente)\n\t(3) Remover Produto\n\t(4) Listar Produtos\n\t(0) Voltar");
+            System.out.print("OPERAÇÃO: ");
+            op = Main.sc.nextInt();
+            Main.sc.nextLine();
 
+            switch (op) {
+                case 1:
+                    adicionarPorArquivo();
+                    break;
+                case 2:
+                    adicionarManualmente();
+                    break;
+            }
+        }
+    }
+
+    private void adicionarManualmente() {
+        // campos
+        char op;
+        int id, quantidade;
+        double preco;
+        String nome, descricao, marca;
+        Categoria categoria;
+
+        System.out.print("ID: ");
+        id = Main.sc.nextInt();
+
+        System.out.print("Nome: ");
+        nome = Main.sc.nextLine();
+
+        System.out.print("Preço: ");
+        preco = Main.sc.nextDouble();
+
+        System.out.print("Descrição: ");
+        descricao = Main.sc.nextLine();
+
+        System.out.print("Marca: ");
+        marca = Main.sc.nextLine();
+
+        System.out.print("Categoria (ID): ");
+
+
+        System.out.print("Quantidade: ");
+
+        do {
+            System.out.println("Produto Físico ou Virtual? <F/V>");
+            System.out.print("R: ");
+            op = Main.sc.next().charAt(0);
+        } while (op != 'F' && op != 'V');
+
+        if (op == 'F') {
+            double peso;
+            String dimensoes;
+
+        }
+    }
+
+    private void adicionarPorArquivo() {
+        File arquivo;
+        Scanner scanner;
+        String path, linha;
+        String[] campos;
+
+        System.out.print("\nDigite o caminho para o arquivo: ");
+        path = Main.sc.nextLine();
+
+        arquivo = new File(path);
+
+        // confere se o arquivo foi aberto corretamente
+        try {
+            scanner = new Scanner(arquivo);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DisplayLoja.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
+
+        while (scanner.hasNextLine()) {
+            linha = scanner.nextLine();
+            campos = linha.split("#");
+            Categoria categoria = buscarCategoria(Integer.parseInt(campos[5]));
+
+            // confere se a categoria do produto é existente
+            if (categoria == null) {
+                System.out.println("Categoria do produto de ID " + campos[0] + " não encontrada!!!");
+            } else {
+                if (campos[6].contains("GB")) { // é um produto virtual
+
+                    // retira o GB para implementação do atributo do produto
+                    String[] parts = campos[6].split(" ");
+                    campos[6] = parts[0];
+
+                    ProdutoVirtual produtoVirtual = new ProdutoVirtual(Integer.parseInt(campos[0]), campos[1], Double.parseDouble(campos[2]), campos[3], campos[4], categoria, Double.parseDouble(campos[6]), campos[7]);
+
+                    if (adicionarProduto(produtoVirtual))
+                        System.out.println("Produto adicionado com sucesso!!");
+                    else
+                        System.out.println("Produto já existente!!!");
+
+                } else { // é um produto físico
+
+                    ProdutoFisico produtoFisico = new ProdutoFisico(Integer.parseInt(campos[0]), campos[1], Double.parseDouble(campos[2]), campos[3], campos[4], categoria, Double.parseDouble(campos[6]), campos[7]);
+
+                    if (adicionarProduto(produtoFisico))
+                        System.out.println("Produto adicionado com sucesso!!");
+                    else
+                        System.out.println("Produto já existente!!!");
+                }
+            }
+
+
+        }
+    }
+
+    public void telaOpcoesUsuario () {
+        System.out.println("\nDigite qual operação você deseja realizar:");
+        System.out.println("\t(1) Buscar Produto\n\t(2) Adicionar Produto ao Carrinho\n\t(3) Visualizar Carrinho\n\t(4) Remover item do Carrinho\n\t(5) Realizar Compra\n\t(6) Listar Produtos\n\t(0) Sair");
+        System.out.print("\nOPERAÇÃO: ");
+    }
+
+    public void telaOpcoesAdmin () {
+        System.out.println("\nDigite qual operação você deseja realizar:");
+        System.out.println("\t(1) Gerenciar Produtos\n\t(2) Gerenciar Categorias\n\t(3) Gerenciar Loja\n\t(4) Listar Produtos\n\t(0) Sair");
+        System.out.print("\nOPERAÇÃO: ");
+    }
+
+    public void visualizarCarrinho () {
+        carrinho.listarCarrinho();
+    }
+
+    public boolean adicionarProduto (ProdutoVirtual produtoVirtual) {
+        return (loja.adicionarProduto(produtoVirtual));
+    }
+
+    public boolean adicionarProduto (ProdutoFisico produtoFisico) {
+        return (loja.adicionarProduto(produtoFisico));
+    }
+
+    // métodos não utilizados
     public Admin criarAdmin () {
         String cpf, usuario, senha, senhaConfirmacao;
 
@@ -282,26 +354,6 @@ public class DisplayLoja extends Loja {
         } while (!(senha.equals(senhaConfirmacao))); //this is a loop to prevent errors
 
         return (new Admin(cpf, usuario, senha)); //constrói o Administrador com as informações recebidas e o retorna
-    }
-
-    public void telaOpcoesUsuario () {
-        System.out.println("\nDigite qual operação você deseja realizar:");
-        System.out.println("\t(1) Buscar Produto\n\t(2) Adicionar Produto ao Carrinho\n\t(3) Visualizar Carrinho\n\t(4) Remover item do Carrinho\n\t(5) Realizar Compra\n\t(6) Listar Produtos\n\t(0) Sair");
-        System.out.print("\nOPERAÇÃO: ");
-    }
-
-    public void telaOpcoesAdmin () {
-        System.out.println("\nDigite qual operação você deseja realizar:");
-        System.out.println("\t(1) Gerenciar Produtos\n\t(2) Gerenciar Categorias\n\t(3) Gerenciar Loja\n\t(4) Listar Produtos\n\t(0) Sair");
-        System.out.print("\nOPERAÇÃO: ");
-    }
-
-    public void visualizarCarrinho () {
-        carrinho.listarCarrinho();
-    }
-
-    public boolean adicionarProduto (Produto produto) {
-
     }
 
 }

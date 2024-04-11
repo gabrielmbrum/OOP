@@ -1,6 +1,4 @@
-package CommerceTechGear;
-
-import CommerceTechGear.Categoria;
+package techgear;
 
 public abstract class Produto {
     // fields

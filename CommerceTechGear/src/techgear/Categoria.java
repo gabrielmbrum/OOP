@@ -1,6 +1,5 @@
-package CommerceTechGear;
+package techgear;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,12 +60,13 @@ public class Categoria {
     }
 
     // required methods
-    public void adicionarProduto (Produto produto) {
+    public boolean adicionarProduto (Produto produto) {
         if (produtoJaExiste(produto)) {
             System.out.println("Produto já existente!");
-            return;
+            return false;
         }
         produtos.add(produto);
+        return true;
     };
 
     public void removerProduto (int id) {

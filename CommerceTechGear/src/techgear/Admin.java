@@ -1,6 +1,4 @@
-package CommerceTechGear;
-
-import java.util.Scanner;
+package techgear;
 
 public class Admin {
     private String CPF;

@@ -1,7 +1,4 @@
-package CommerceTechGear;
-
-import CommerceTechGear.Categoria;
-import CommerceTechGear.DisplayLoja;
+package techgear;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,24 +62,26 @@ public class Loja extends Categoria {
         categorias.add(categoria);
     };
 
-    public void adicionarProduto(Produto produto) {
+    public boolean adicionarProduto(Produto produto) {
         // verifica se o produto ja existe
         for (Categoria categoria : categorias) {
             if (categoria.produtoJaExiste(produto)) {
                 System.out.println("Produto já existente!");
-                return;
+                return false;
             }
         }
 
         // procura por meio da comparação do id da categoria do produto e adiciona na categoria correta
         for (Categoria categoria : categorias) {
             if (produto.getCategoria().getCodigo() == categoria.getCodigo()) {
-                categoria.adicionarProduto(produto);
-                return;
+                if (categoria.adicionarProduto(produto)) {
+                    return true;
+                }
             }
         }
 
         System.out.println("Produto possue categoria inválida!!");
+        return false;
     };
 
     public Categoria buscarCategoria(String nome) {

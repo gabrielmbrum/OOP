@@ -1,7 +1,4 @@
-package CommerceTechGear;
-
-import CommerceTechGear.Categoria;
-import CommerceTechGear.Produto;
+package techgear;
 
 public class ProdutoVirtual extends Produto {
     // fields
