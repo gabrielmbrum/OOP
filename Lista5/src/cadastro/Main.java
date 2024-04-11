@@ -4,12 +4,20 @@ package cadastro;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        Aluno a = new Aluno("", "geraldo", 10);
+        Aluno a = new Aluno("a", "geraldo", 6);
+        Aluno b = new Aluno("b", "carlos", 10);
+        Aluno c;
+        CadastroAlunos lista = new CadastroAlunos();
 
+        lista.adicionarAluno(a);
+        lista.adicionarAluno(b);
         try {
-            a.validarNota();
+            c = lista.buscarAluno("a");
             a.validarMatricula();
-        } catch (NotaInvalidaException | MatriculaInvalidaException e) {
+            b.validarNota();
+            lista.removerAluno("c");
+
+        } catch (AlunoInexistenteException | NotaInvalidaException | MatriculaInvalidaException e) {
             System.err.println("ERRO: " + e.getMessage());
         }
     }
