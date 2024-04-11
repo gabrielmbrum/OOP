@@ -11,14 +11,8 @@ public class Main {
 
         lista.adicionarAluno(a);
         lista.adicionarAluno(b);
-        try {
-            c = lista.buscarAluno("a");
-            a.validarMatricula();
-            b.validarNota();
-            lista.removerAluno("c");
 
-        } catch (AlunoInexistenteException | NotaInvalidaException | MatriculaInvalidaException e) {
-            System.err.println("ERRO: " + e.getMessage());
-        }
+        lista.adicionarAlunoInterativo();
+        lista.listarAluno();
     }
 }
