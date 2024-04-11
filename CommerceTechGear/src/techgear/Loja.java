@@ -63,25 +63,7 @@ public class Loja extends Categoria {
     };
 
     public boolean adicionarProduto(Produto produto) {
-        // verifica se o produto ja existe
-        for (Categoria categoria : categorias) {
-            if (categoria.produtoJaExiste(produto)) {
-                System.out.println("Produto já existente!");
-                return false;
-            }
-        }
-
-        // procura por meio da comparação do id da categoria do produto e adiciona na categoria correta
-        for (Categoria categoria : categorias) {
-            if (produto.getCategoria().getCodigo() == categoria.getCodigo()) {
-                if (categoria.adicionarProduto(produto)) {
-                    return true;
-                }
-            }
-        }
-
-        System.out.println("Produto possue categoria inválida!!");
-        return false;
+        return produto.getCategoria().adicionarProduto(produto);
     };
 
     public Categoria buscarCategoria(String nome) {
@@ -141,10 +123,24 @@ public class Loja extends Categoria {
         System.out.println("ERRO!! PRODUTO NÃO EXISTENTE!!");
     };
 
-    // extra methods
+    public void removerCategoria(int id) {
+        categorias.removeIf(categoria -> categoria.getCodigo() == id);
+    }
     public void imprimirCategorias() {
+        if (categorias.isEmpty()) {
+            System.out.println("Não há categorias cadastradas!!");
+            return;
+        }
         for (Categoria categoria : categorias) {
             System.out.println(categoria.getCodigo() + " " + categoria.getNome() + " " + categoria.getDescricao());
+        }
+    }
+
+    public void imprimirProdutos() {
+        System.out.println("Produtos da " + getNome());
+        for (Categoria categoria : categorias) {
+            System.out.println("\nCategoria " + categoria.getNome());
+            categoria.imprimirProdutos();
         }
     }
 
@@ -160,12 +156,5 @@ public class Loja extends Categoria {
         return null;
     };
 
-    public void imprimirProdutos() {
-        for (Categoria categoria : categorias) {
-            System.out.println("Categoria: " + categoria.getCodigo());
-            for (Produto produto : categoria.getProdutos()) {
-                System.out.println("\t" + produto.getId() + " " + produto.getNome());
-            }
-        }
-    }
+
 }

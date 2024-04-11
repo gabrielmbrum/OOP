@@ -110,8 +110,9 @@ public class Categoria {
     }
 
     public void imprimirProdutos () {
+        if (produtos.isEmpty()) System.out.println("Não tem produtos!!!");
         for (Produto produto : produtos) {
-            System.out.println(produto.getId() + produto.getNome() + produto.getPreco() + produto.getCategoria().getNome());
+            System.out.println("\tID: " + produto.getId() + " | Nome: " + produto.getNome() + " | Preço: R$" + produto.getPreco());
         }
     }
 }
