@@ -69,12 +69,12 @@ public class Categoria {
         return true;
     };
 
-    public void removerProduto (int id) {
+    public void removerProduto (int id, boolean admin) {
         // percorre a array de produtos e quando encontra o id correspondente, remove o produto e encerra
         for (Produto produto : produtos) {
             if (produto.getId() == id) {
                 produtos.remove(produto);
-                System.out.println("Produto removido com sucesso!");
+                if (admin) System.out.println("Produto removido com sucesso!");
                 return;
             }
         }
@@ -124,5 +124,19 @@ public class Categoria {
         for (Produto produto : produtos) {
             System.out.println("\tID: " + produto.getId() + " | Nome: " + produto.getNome() + " | Preço: R$" + produto.getPreco());
         }
+    }
+
+    public void vender (Produto produto) {
+        List<Integer> ids = new ArrayList<Integer>();
+
+        for (Produto prod : produtos) {
+            if (prod.getId() == produto.getId()) {
+                prod.setQuantidade(produto.getQuantidade());
+                if (prod.getQuantidade() == 0) ids.add(prod.getId());
+            }
+        }
+
+        for (Integer aux : ids) // remove os elementos zerados
+            removerProduto(aux, false);
     }
 }

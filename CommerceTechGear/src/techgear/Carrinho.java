@@ -27,14 +27,15 @@ public class Carrinho {
     // métodos
     public void removerProduto(Produto produto) {
        if (produtos.remove(produto))
-           System.out.println("Produto removido com sucesso!");
+           System.out.println("\nProduto removido do carrinho com sucesso!");
        else
            System.out.println("ERRO! Produto não encontrado!");
     }
 
     public void listarCarrinho () {
-        if (produtos == null) System.out.println("Carrinho Vazio!!!");
+        if (produtos.isEmpty()) System.out.println("\nCarrinho Vazio!!!");
         else {
+            System.out.println("\nCarrinho: ");
             for (Produto produto : produtos) {
                 System.out.print("\t" + produto.getNome() + " | valor: R$");
                 System.out.format("%.2f\n", produto.getPreco());

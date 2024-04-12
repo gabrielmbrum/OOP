@@ -13,5 +13,6 @@ public class Main {
         DisplayLoja display = new DisplayLoja(loja, admin, new Carrinho());
 
         display.telaPrincipal();
+
     }
 }

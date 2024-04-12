@@ -38,7 +38,12 @@ public class DisplayLoja {
     public void telaPrincipal() {
         int op = -1;
 
-        System.out.println("BEM VINDO!!!");
+        System.out.println("__________                 ____   ____.__            .___      ");
+        System.out.println("\\______   \\ ____   _____   \\   \\ /   /|__| ____    __| _/____  ");
+        System.out.println(" |    |  _// __ \\ /     \\   \\   Y   / |  |/    \\  / __ |/  _ \\ ");
+        System.out.println(" |    |   \\  ___/|  Y Y  \\   \\     /  |  |   |  \\/ /_/ (  <_> )");
+        System.out.println(" |______  /\\___  >__|_|  /    \\___/   |__|___|  /\\____ |\\____/ ");
+        System.out.println("        \\/     \\/      \\/                     \\/      \\/       ");
 
         while (op != 0) {
             System.out.println("\nQual tela deseja utilizar?");
@@ -79,10 +84,8 @@ public class DisplayLoja {
                 case 2: visualizarCarrinho(); break;
                 case 3: removerItemDoCarrinho(); break;
                 case 4: realizarCompra(); break;
-                case 5:
-                    break;
-                default:
-                    System.out.println("\tOperação Inválida!!");
+                case 5: loja.imprimirProdutos(); break;
+                default: System.out.println("\tOperação Inválida!!");
             }
         }
 
@@ -143,10 +146,8 @@ public class DisplayLoja {
         int op = 1;
         Produto produto;
 
-        System.out.println("\n====================||===========||=================\n");
-
         while (op != 0) {
-            System.out.println("\nDeseja buscar produto pelo:\n\t(1) Nome\n\t(2) ID\n\t(0) Voltar");
+            System.out.println("\n\nDeseja buscar produto pelo:\n\t(1) Nome\n\t(2) ID\n\t(0) Voltar");
             System.out.println("OPERAÇÃO: ");
             op = Main.sc.nextInt();
             Main.sc.nextLine();
@@ -202,7 +203,7 @@ public class DisplayLoja {
                         Main.sc.nextLine();
                     }
                     carrinho.aumentarQuantidade(produto.getId(), qtd);
-
+                    System.out.println("Esse produto já estava no carrinho! Sua quantidade foi alterada!");
                 } else {
                     while (qtd > produto.getQuantidade()) {
                         System.out.print("QUANTIDADE INDISPONÍVEL!!!\nDigite uma quantidade menor: ");
@@ -218,20 +219,22 @@ public class DisplayLoja {
 
     void adicionarAoCarrinho(Produto produto) {
         carrinho.getProdutos().add(produto);
+        System.out.println("Produto adicionado ao carrinho com sucesso!!!");
     };
 
     void removerItemDoCarrinho() {
         int op = 1;
         Produto produto;
 
-        System.out.println("\n====================||===========||=================\n");
-
         while (op != 0) {
             System.out.println("\nDeseja remover produto do carrinho pelo:\n\t(1) Nome do Produto\n\t(2) ID do Produto\n\t(0) Voltar");
-            System.out.println("OPERAÇÃO: ");
+            System.out.print("OPERAÇÃO: ");
             op = Main.sc.nextInt();
             Main.sc.nextLine();
+
             switch (op) {
+                case 0: return;
+
                 case 1:
                     System.out.print("\nDigite o nome: ");
                     String nome = Main.sc.nextLine();
@@ -250,8 +253,6 @@ public class DisplayLoja {
 
                     carrinho.removerProduto(produto);
                     break;
-
-                case 0: return;
             }
         }
     }
@@ -266,6 +267,7 @@ public class DisplayLoja {
     void realizarCompra() {
         System.out.println("Valor da compra: R$" + carrinho.valor());
         loja.venderProdutos(carrinho.getProdutos());
+        carrinho.getProdutos().clear(); //limpa o carrinho
     }
 
     void gerenciarCategorias() {
@@ -327,7 +329,7 @@ public class DisplayLoja {
 
     public void telaOpcoesUsuario () {
         System.out.println("\nDigite qual operação você deseja realizar:");
-        System.out.println("\t(1) Buscar Produto\n\t(2) Adicionar Produto ao Carrinho\n\t(3) Visualizar Carrinho\n\t(4) Remover item do Carrinho\n\t(5) Realizar Compra\n\t(6) Listar Produtos\n\t(0) Sair");
+        System.out.println("\t(1) Buscar Produto\n\t(2) Visualizar Carrinho\n\t(3) Remover item do Carrinho\n\t(4) Realizar Compra\n\t(5) Listar Produtos\n\t(0) Sair");
         System.out.print("\nOPERAÇÃO: ");
     }
 
@@ -342,10 +344,10 @@ public class DisplayLoja {
         String path, linha;
         String [] campos;
 
-        //System.out.print("Digite o caminho para o arquivo: ");
-        //path = Main.sc.nextLine();
+        System.out.print("Digite o caminho para o arquivo: ");
+        path = Main.sc.nextLine();
 
-        File arquivo = new File("/home/brum/Documents/categoria.txt");
+        File arquivo = new File(path);
 
         try {
             scanner = new Scanner(arquivo);
@@ -361,6 +363,8 @@ public class DisplayLoja {
 
             loja.adicionarCategoria( new Categoria(Integer.parseInt(campos[0]), campos[1], campos[2]) );
         }
+
+        System.out.println("\nCategorias adicionadas com sucesso!!!");
     }
 
     private void adicionarCategoriaManualmente () {
@@ -499,8 +503,8 @@ public class DisplayLoja {
                 if (!sucesso) System.out.println("ERRO AO ADICIONAR PRODUTO DE ID: " + campos[0]);
             }
 
-            System.out.println("\tProdutos adicionados com sucesso!!!");
         }
+        System.out.println("\nProdutos adicionados com sucesso!!!");
     }
 
     public void visualizarCarrinho () {
@@ -514,29 +518,6 @@ public class DisplayLoja {
     public boolean adicionarProduto (ProdutoFisico produtoFisico) {
         return (loja.adicionarProduto(produtoFisico));
     }
-
-    // métodos não utilizados
-    public Admin criarAdmin () {
-        String cpf, usuario, senha, senhaConfirmacao;
-
-        System.out.print("Digite seu CPF: ");
-        cpf = Main.sc.nextLine();
-
-        System.out.print("Digite seu usuário: ");
-        usuario = Main.sc.nextLine();
-
-        do {
-            System.out.print("Digite sua senha: ");
-            senha = Main.sc.nextLine();
-
-            System.out.print("Confirme sua senha: ");
-            senhaConfirmacao = Main.sc.nextLine();
-
-        } while (!(senha.equals(senhaConfirmacao))); //this is a loop to prevent errors
-
-        return (new Admin(cpf, usuario, senha)); //constrói o Administrador com as informações recebidas e o retorna
-    }
-
 }
 
 

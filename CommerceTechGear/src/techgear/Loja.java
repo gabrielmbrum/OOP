@@ -126,15 +126,17 @@ public class Loja {
         categorias.removeIf(categoria -> categoria.getCodigo() == id);
     }
 
-    public boolean venderProdutos(List<Produto> produtos) {
-        for (Produto produto : produtos) {
+    public void venderProdutos(List<Produto> carrinho) {
+        for (Produto produto : carrinho) {
             vender(produto);
         }
     }
 
-    public boolean vender(Produto produto) {
+    public void vender(Produto produto) {
         // dar baixa no estoque
-        //
+        for (Categoria categoria : categorias)
+            if (categoria.getCodigo() == produto.getCategoria().getCodigo())
+                categoria.vender(produto);
     }
 
     public void imprimirCategorias() {
