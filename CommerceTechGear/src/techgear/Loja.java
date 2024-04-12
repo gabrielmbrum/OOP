@@ -3,7 +3,7 @@ package techgear;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Loja extends Categoria {
+public class Loja {
     // fields
     private String nome;
     private String cnpj;
@@ -95,12 +95,11 @@ public class Loja extends Categoria {
 
     public Produto buscarProduto (String nome) {
         // busca dentro de cada array de produtos dentro de cada posição do array de categorias, até encontrar o produto e o retorna
+        Produto produto;
+
         for (Categoria categoria : categorias) {
-            for (Produto produto : categoria.getProdutos()) {
-                if (produto.getNome().equals(nome)) {
-                    return produto;
-                }
-            }
+            produto = categoria.buscarProduto(nome);
+            if (produto != null) return produto;
         }
 
         // caso de não encontrar o produto
@@ -126,6 +125,18 @@ public class Loja extends Categoria {
     public void removerCategoria(int id) {
         categorias.removeIf(categoria -> categoria.getCodigo() == id);
     }
+
+    public boolean venderProdutos(List<Produto> produtos) {
+        for (Produto produto : produtos) {
+            vender(produto);
+        }
+    }
+
+    public boolean vender(Produto produto) {
+        // dar baixa no estoque
+        //
+    }
+
     public void imprimirCategorias() {
         if (categorias.isEmpty()) {
             System.out.println("Não há categorias cadastradas!!");

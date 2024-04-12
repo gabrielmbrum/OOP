@@ -41,4 +41,31 @@ public class Carrinho {
             }
         }
     }
+
+    public int quantidadeExistente(int id) {
+        for (Produto produto : produtos)
+            if (produto.getId() == id)
+                return produto.getQuantidade();
+        return 0;
+    }
+    public void aumentarQuantidade (int id, int qtd) {
+        for (Produto produto : produtos)
+            if (produto.getId() == id)
+                produto.setQuantidade(produto.getQuantidade() + qtd);
+    }
+
+    public boolean contem (int id) {
+        for (Produto produto : produtos)
+            if (produto.getId() == id)
+                return true;
+
+        return false;
+    }
+
+    public double valor () {
+        double val = 0;
+        for (Produto produto : produtos)
+            val = produto.getPreco() * produto.getQuantidade();
+        return val;
+    }
 }

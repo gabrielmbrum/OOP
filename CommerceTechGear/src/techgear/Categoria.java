@@ -90,10 +90,20 @@ public class Categoria {
                 return produto;
         }
 
-        // caso o produto não exista
-        System.out.println("ERRO!! PRODUTO NÃO ENCONTRADO");
+        // produto não existe
         return null;
-    };
+    }
+
+    public Produto buscarProduto (String nome) {
+        // percorre o array buscando correspondencia pelo id, entao o retorna
+        for (Produto produto : produtos) {
+            if (produto.getNome().equals(nome))
+                return produto;
+        }
+
+        // produto não existe
+        return null;
+    }
 
     public List<Produto> listarProdutos() {
         return produtos;

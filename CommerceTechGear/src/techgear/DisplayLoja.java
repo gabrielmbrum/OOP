@@ -6,7 +6,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DisplayLoja extends Loja {
+public class DisplayLoja {
     // campos
     private Loja loja;
     private Admin admin;
@@ -68,14 +68,17 @@ public class DisplayLoja extends Loja {
             telaOpcoesUsuario();
             op = Main.sc.nextInt();
             Main.sc.nextLine();
-
+            // (1) Buscar Produto
+            //	(2) Visualizar Carrinho
+            //	(3) Remover item do Carrinho
+            //	(4) Realizar Compra
+            //	(5) Listar Produtos
             switch (op) {
                 case 0: return;
                 case 1: buscarProdutos(); break;
-                case 2: break;
-                case 3: visualizarCarrinho(); break;
-                case 4:
-                    break;
+                case 2: visualizarCarrinho(); break;
+                case 3: removerItemDoCarrinho(); break;
+                case 4: realizarCompra(); break;
                 case 5:
                     break;
                 default:
@@ -143,7 +146,7 @@ public class DisplayLoja extends Loja {
         System.out.println("\n====================||===========||=================\n");
 
         while (op != 0) {
-            System.out.println("\nDeseja buscar produto pelo:\n\t(1) Nome\n\t(2) ID\n\t(0) Sair");
+            System.out.println("\nDeseja buscar produto pelo:\n\t(1) Nome\n\t(2) ID\n\t(0) Voltar");
             System.out.println("OPERAÇÃO: ");
             op = Main.sc.nextInt();
             Main.sc.nextLine();
@@ -151,25 +154,29 @@ public class DisplayLoja extends Loja {
                 case 1:
                     System.out.print("\nDigite o nome: ");
                     String nome = Main.sc.nextLine();
-                    produto = buscarProduto(nome);
-                    verificaProduto(produto);
+
+                    produto = loja.buscarProduto(nome);
+
+                    if (produto != null) verificaProduto(produto);
                     break;
 
                 case 2:
-                    System.out.print("Digite o id: ");
+                    System.out.print("Digite o ID: ");
                     int id = Main.sc.nextInt();
                     Main.sc.nextLine();
 
-                    produto = buscarProduto(id);
+                    produto = loja.buscarProduto(id);
 
-                    verificaProduto(produto);
+                    if (produto != null) verificaProduto(produto);
                     break;
+
                 case 0: return;
             }
         }
 
     }
 
+    // mostra qual o produto encontrado e da opção para o usuário escolher se quer adicionar ao carrinho ou não
     private void verificaProduto(Produto produto) {
         if (produto != null) {
             char c = 'c';
@@ -183,17 +190,83 @@ public class DisplayLoja extends Loja {
                 c = Main.sc.next().charAt(0);
             }
 
-            if (c == 'S' || c == 's')
-                adicionarAoCarrinho(produto);
-        } else
-            System.out.println("Produto não encontrado! :(");
+            if (c == 'S' || c == 's') {
+                System.out.print("Digite a quantidade desejada: ");
+                int qtd = Main.sc.nextInt();
+                Main.sc.nextLine();
+
+                if (jaEstaNoCarrinho(produto.getId())) {
+                    while (qtd + carrinho.quantidadeExistente(produto.getId()) > produto.getQuantidade()) { // enquanto a quantidade desejada + quantidade ja adicionada ao carrinho for maior que a quantidade disponível
+                        System.out.print("QUANTIDADE INDISPONÍVEL!!!\nDigite uma quantidade menor: ");
+                        qtd = Main.sc.nextInt();
+                        Main.sc.nextLine();
+                    }
+                    carrinho.aumentarQuantidade(produto.getId(), qtd);
+
+                } else {
+                    while (qtd > produto.getQuantidade()) {
+                        System.out.print("QUANTIDADE INDISPONÍVEL!!!\nDigite uma quantidade menor: ");
+                        qtd = Main.sc.nextInt();
+                        Main.sc.nextLine();
+                    }
+                    produto.setQuantidade(qtd);
+                    adicionarAoCarrinho(produto);
+                }
+            }
+        }
     }
 
     void adicionarAoCarrinho(Produto produto) {
         carrinho.getProdutos().add(produto);
     };
 
-    void realizarCompra() {};
+    void removerItemDoCarrinho() {
+        int op = 1;
+        Produto produto;
+
+        System.out.println("\n====================||===========||=================\n");
+
+        while (op != 0) {
+            System.out.println("\nDeseja remover produto do carrinho pelo:\n\t(1) Nome do Produto\n\t(2) ID do Produto\n\t(0) Voltar");
+            System.out.println("OPERAÇÃO: ");
+            op = Main.sc.nextInt();
+            Main.sc.nextLine();
+            switch (op) {
+                case 1:
+                    System.out.print("\nDigite o nome: ");
+                    String nome = Main.sc.nextLine();
+
+                    produto = loja.buscarProduto(nome);
+
+                    carrinho.removerProduto(produto);
+                    break;
+
+                case 2:
+                    System.out.print("Digite o ID: ");
+                    int id = Main.sc.nextInt();
+                    Main.sc.nextLine();
+
+                    produto = loja.buscarProduto(id);
+
+                    carrinho.removerProduto(produto);
+                    break;
+
+                case 0: return;
+            }
+        }
+    }
+
+    boolean jaEstaNoCarrinho(int id) {
+        if (carrinho.contem(id)) // precisei criar um método contem pq não podia usar o 'contains()' pelo motivo dele comparar o objeto completamente, sendo que as quantidades seriam diferentes
+            return true;
+
+        return false;
+    }
+
+    void realizarCompra() {
+        System.out.println("Valor da compra: R$" + carrinho.valor());
+        loja.venderProdutos(carrinho.getProdutos());
+    }
 
     void gerenciarCategorias() {
         int id, op = 1;
@@ -208,8 +281,8 @@ public class DisplayLoja extends Loja {
                 case 0: break;
                 case 1: adicionarCategoriaPorArquivo(); break;
                 case 2: adicionarCategoriaManualmente(); break;
-                case 3: System.out.print("Digite o ID: "); id = Main.sc.nextInt(); Main.sc.nextLine(); removerCategoria(id); break;
-                case 4: imprimirCategorias(); break;
+                case 3: System.out.print("Digite o ID: "); id = Main.sc.nextInt(); Main.sc.nextLine(); loja.removerCategoria(id); break;
+                case 4: loja.imprimirCategorias(); break;
             }
         }
     }
@@ -227,13 +300,8 @@ public class DisplayLoja extends Loja {
                 case 0: break;
                 case 1: adicionarProdutoPorArquivo(); break;
                 case 2: adicionarProdutoManualmente(); break;
-                case 3:
-                    System.out.print("Digite o ID: ");
-                    id = Main.sc.nextInt();
-                    Main.sc.nextLine();
-                    removerProduto(id);
-                    break;
-                case 4: imprimirProdutos(); break;
+                case 3: System.out.print("Digite o ID: "); id = Main.sc.nextInt(); Main.sc.nextLine(); loja.removerProduto(id); break;
+                case 4: loja.imprimirProdutos(); break;
             }
         }
     }
@@ -291,7 +359,7 @@ public class DisplayLoja extends Loja {
             linha = scanner.nextLine();
             campos = linha.split("#");
 
-            adicionarCategoria( new Categoria(Integer.parseInt(campos[0]), campos[1], campos[2]) );
+            loja.adicionarCategoria( new Categoria(Integer.parseInt(campos[0]), campos[1], campos[2]) );
         }
     }
 
@@ -310,7 +378,7 @@ public class DisplayLoja extends Loja {
         System.out.print("Descrição: ");
         descricao = Main.sc.nextLine();
 
-        adicionarCategoria(new Categoria(codigo, nome, descricao));
+        loja.adicionarCategoria(new Categoria(codigo, nome, descricao));
     }
 
     private void adicionarProdutoManualmente() {
@@ -342,7 +410,7 @@ public class DisplayLoja extends Loja {
         System.out.print("Categoria (ID): ");
         aux = Main.sc.nextInt();
         Main.sc.nextLine();
-        categoria = buscarCategoria(aux);
+        categoria = loja.buscarCategoria(aux);
         if (categoria == null) return;
 
         System.out.print("Quantidade: ");
@@ -406,7 +474,7 @@ public class DisplayLoja extends Loja {
         while (scanner.hasNextLine()) {
             linha = scanner.nextLine();
             campos = linha.split("#");
-            Categoria categoria = buscarCategoria(Integer.parseInt(campos[5]));
+            Categoria categoria = loja.buscarCategoria(Integer.parseInt(campos[5]));
 
             // confere se a categoria do produto é existente
             if (categoria == null) {
