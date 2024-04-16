@@ -36,6 +36,9 @@ public class DisplayLoja {
 
     // métodos
     public void telaPrincipal() {
+        /*
+        contém a mensagem de 'bem vindo' e mostra as opções de tela e de encerrar o programa
+         */
         int op = -1;
 
         System.out.println("__________                 ____   ____.__            .___      ");
@@ -63,6 +66,9 @@ public class DisplayLoja {
     }
 
     private void telaUsuario() {
+        /*
+        opções destinadas ao usuário, com saída para retornar a tela principal
+         */
         int op = 1;
 
         System.out.println("\n====================||===========||=================\n");
@@ -87,6 +93,9 @@ public class DisplayLoja {
 
     }
     private void telaAdmin() {
+        /*
+        tela destinada ao adm, com verificação de usuário e senha, além de gerenciamento total da loja e seu conteúdo
+         */
         String senha, usuario;
         int count = 0, op;
 
@@ -136,7 +145,17 @@ public class DisplayLoja {
         }
     }
 
-    private void buscarProdutos() {
+    private void telaOpcoesUsuario () {
+        System.out.println("\nDigite qual operação você deseja realizar:");
+        System.out.println("\t(1) Buscar Produto\n\t(2) Visualizar Carrinho\n\t(3) Remover item do Carrinho\n\t(4) Realizar Compra\n\t(5) Listar Produtos\n\t(0) Sair");
+        System.out.print("\nOPERAÇÃO: ");
+    }
+
+    void buscarProdutos() {
+        /*
+        ação de usuário
+        busca o produto e após isso passa para o procedimento de verificação de correspondência (se é o produto desejado)
+         */
         int op = 1;
         Produto produto, aux = null;
 
@@ -177,6 +196,10 @@ public class DisplayLoja {
     }
 
     private void verificaProduto(Produto produto) {
+        /*
+        mostra qual produto foi encontrado e permite adicioná-lo ao carirnho ou alterar sua quantidade
+        (caso já esteja no carrinho)
+         */
         if (produto != null) {
             char c = 'c';
 
@@ -208,19 +231,22 @@ public class DisplayLoja {
                         qtd = Main.sc.nextInt();
                         Main.sc.nextLine();
                     }
-                    produto.setQuantidade(qtd);
+                    produto.atualizarEstoque(qtd);
                     adicionarAoCarrinho(produto);
                 }
             }
         }
     }
 
-    private void adicionarAoCarrinho(Produto produto) {
+    void adicionarAoCarrinho(Produto produto) {
         carrinho.getProdutos().add(produto);
         System.out.println("Produto adicionado ao carrinho com sucesso!!!");
-    };
+    }
 
     private void removerItemDoCarrinho() {
+        /*
+        método de remoção, tanto pelo ID quanto pelo Nome do produto
+         */
         int op = 1;
         Produto produto;
 
@@ -256,19 +282,33 @@ public class DisplayLoja {
     }
 
     private boolean jaEstaNoCarrinho(int id) {
-        if (carrinho.contem(id)) // precisei criar um método contem pq não podia usar o 'contains()' pelo motivo dele comparar o objeto completamente, sendo que as quantidades seriam diferentes
-            return true;
-
-        return false;
+        // precisei criar um método contem pq não podia usar o 'contains()' pelo motivo dele comparar o objeto completamente, sendo que as quantidades seriam diferentes
+        return carrinho.contem(id);
     }
 
-    private void realizarCompra() {
+    void realizarCompra() {
         System.out.println("Valor da compra: R$" + carrinho.valor());
+        System.out.println("Frete: R$ " + carrinho.maiorFrete());
         loja.venderProdutos(carrinho.getProdutos());
         carrinho.getProdutos().clear(); //limpa o carrinho
     }
 
-    private void gerenciarCategorias() {
+    private void visualizarCarrinho () {
+        carrinho.listarCarrinho();
+    }
+
+    private void telaOpcoesAdmin () {
+        System.out.println("\nDigite qual operação você deseja realizar:");
+        System.out.println("\t(1) Gerenciar Produtos\n\t(2) Gerenciar Categorias\n\t(3) Gerenciar Loja\n\t(0) Sair");
+        System.out.print("\nOPERAÇÃO: ");
+    }
+
+    void gerenciarCategorias() {
+        /*
+        funcionalidade do adm
+        adiciona e remove as categorias da loja
+        lista as categorias existentes
+         */
         int id, op = 1;
 
         while (op!=0) {
@@ -287,11 +327,15 @@ public class DisplayLoja {
         }
     }
 
-    private void gerenciarProdutos() {
+    void gerenciarProdutos() {
+        /*
+        funcionalidade de adm
+        adiciona, remove e lista produtos
+         */
         int id, op = 1;
 
         while (op!=0) {
-            System.out.println("\nO que deseja fazer?\n\t(1) Adicionar Produto (via Arquivo)\n\t(2) Adicionar Produto (manualmente)\n\t(3) Remover Produto\n\t(4) Listar Produtos\n\t(0) Voltar\n");
+            System.out.println("\nO que deseja fazer?\n\t(1) Adicionar Produto (via Arquivo)\n\t(2) Adicionar Produto (manualmente)\n\t(3) Editar Preço de Produto\n\t(4) Remover Produto\n\t(5) Listar Produtos\n\t(0) Voltar\n");
             System.out.print("OPERAÇÃO: ");
             op = Main.sc.nextInt();
             Main.sc.nextLine();
@@ -300,13 +344,40 @@ public class DisplayLoja {
                 case 0: break;
                 case 1: adicionarProdutoPorArquivo(); break;
                 case 2: adicionarProdutoManualmente(); break;
-                case 3: System.out.print("Digite o ID: "); id = Main.sc.nextInt(); Main.sc.nextLine(); loja.removerProduto(id); break;
-                case 4: loja.imprimirProdutos(); break;
+                case 3:
+                    System.out.print("Digite o ID: ");
+                    id = Main.sc.nextInt();
+                    Main.sc.nextLine();
+                    editarPreco(id);
+                    break;
+                case 4: System.out.print("Digite o ID: "); id = Main.sc.nextInt(); Main.sc.nextLine(); loja.removerProduto(id); break;
+                case 5: loja.imprimirProdutos(); break;
             }
         }
     }
 
+    private void editarPreco (int id) {
+        Produto prod = loja.buscarProduto(id);
+        double novoPreco;
+        if (prod != null) {
+            System.out.print("Preço atual (p/ unidade): R$ ");
+            System.out.format(" %.2f\n\n", prod.getPreco());
+
+            System.out.print("Digite o novo preço: ");
+            novoPreco = Main.sc.nextDouble();
+            Main.sc.nextLine();
+
+            prod.atualizaPreco(novoPreco);
+
+            System.out.println("\n\tPreço alterado com sucesso!!!");
+        }
+    }
+
     private void gerenciarLoja() {
+        /*
+        funcionalidade de adm
+        altera nome, cnpj e endereço da loja
+         */
         String aux; int op = 1;
 
         while (op!=0) {
@@ -323,18 +394,6 @@ public class DisplayLoja {
                 case 4: System.out.println("\n\tNome: " + loja.getNome() + "\n\tCNPJ: " + loja.getCnpj() + "\n\tEndereço: " + loja.getEndereco());
             }
         }
-    }
-
-    private void telaOpcoesUsuario () {
-        System.out.println("\nDigite qual operação você deseja realizar:");
-        System.out.println("\t(1) Buscar Produto\n\t(2) Visualizar Carrinho\n\t(3) Remover item do Carrinho\n\t(4) Realizar Compra\n\t(5) Listar Produtos\n\t(0) Sair");
-        System.out.print("\nOPERAÇÃO: ");
-    }
-
-    private void telaOpcoesAdmin () {
-        System.out.println("\nDigite qual operação você deseja realizar:");
-        System.out.println("\t(1) Gerenciar Produtos\n\t(2) Gerenciar Categorias\n\t(3) Gerenciar Loja\n\t(0) Sair");
-        System.out.print("\nOPERAÇÃO: ");
     }
 
     private void adicionarCategoriaPorArquivo () {
@@ -366,7 +425,6 @@ public class DisplayLoja {
     }
 
     private void adicionarCategoriaManualmente () {
-        // campos
         int codigo;
         String nome, descricao;
 
@@ -384,7 +442,6 @@ public class DisplayLoja {
     }
 
     private void adicionarProdutoManualmente() {
-        // campos
         char op;
         int id, quantidade, aux;
         double preco, coringa1; // coringa1 funciona para o peso em produtos físicos e para o tamanho em arquivos digitais
@@ -503,10 +560,6 @@ public class DisplayLoja {
 
         }
         System.out.println("\nProdutos adicionados com sucesso!!!");
-    }
-
-    private void visualizarCarrinho () {
-        carrinho.listarCarrinho();
     }
 
     private boolean adicionarProduto (ProdutoVirtual produtoVirtual) {

@@ -46,7 +46,7 @@ public class Carrinho {
     public void aumentarQuantidade (int id, int qtd) {
         for (Produto produto : produtos)
             if (produto.getId() == id)
-                produto.setQuantidade(produto.getQuantidade() + qtd);
+                produto.atualizarEstoque(produto.getQuantidade() + qtd);
     }
 
     public boolean contem (int id) {
@@ -62,5 +62,16 @@ public class Carrinho {
         for (Produto produto : produtos)
             val += produto.getPreco() * produto.getQuantidade();
         return val;
+    }
+
+    public double maiorFrete() {
+        double frete = 0;
+        for (Produto produto : produtos)
+            if (produto instanceof ProdutoFisico) {
+                if (((ProdutoFisico) produto).calcularFrete() > frete)
+                    frete = ((ProdutoFisico) produto).calcularFrete();
+            }
+
+        return frete;
     }
 }

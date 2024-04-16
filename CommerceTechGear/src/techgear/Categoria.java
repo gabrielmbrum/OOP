@@ -118,13 +118,6 @@ public class Categoria {
         return false;
     }
 
-    public void imprimirProdutos () {
-        if (produtos.isEmpty()) System.out.println("Não tem produtos!!!");
-        for (Produto produto : produtos) {
-            System.out.println("\tID: " + produto.getId() + " | Nome: " + produto.getNome() + " | Preço: R$" + produto.getPreco());
-        }
-    }
-
     public void vender (Produto produto) {
         /*
         essa função faz a 'venda' dos produtos e realiza a atualização do estoque dos produtos,
@@ -135,8 +128,10 @@ public class Categoria {
 
         for (Produto prod : produtos) {
             if (prod.getId() == produto.getId()) {
-                prod.setQuantidade(prod.getQuantidade() - produto.getQuantidade());
+                prod.atualizarEstoque(prod.getQuantidade() - produto.getQuantidade());
                 if (prod.getQuantidade() == 0) ids.add(prod.getId());
+                if (prod instanceof ProdutoVirtual)
+                    ((ProdutoVirtual) prod).realizarDownload();
             }
         }
 

@@ -46,10 +46,6 @@ public abstract class Produto {
         return preco;
     }
 
-    public void setPreco(double preco) {
-        atualizaPreco(preco);
-    }
-
     public String getDescricao() {
         return descricao;
     }
@@ -78,13 +74,9 @@ public abstract class Produto {
         return quantidade;
     }
 
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
-    }
-
     // métodos
     public void atualizarEstoque (int quantidade) {
-        setQuantidade(quantidade);
+        this.quantidade = quantidade;
     }
 
     public void atualizaPreco(double novoPreco) {

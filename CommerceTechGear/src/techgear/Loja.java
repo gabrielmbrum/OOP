@@ -58,7 +58,8 @@ public class Loja {
     public void adicionarCategoria(Categoria categoria) {
         if (buscarCategoria(categoria.getNome()) == null)
             categorias.add(categoria);
-        else System.out.println("ERRO!! Categoria já existente!!");
+        else
+            System.out.println("ERRO!! Categoria já existente!!");
     }
 
     public boolean adicionarProduto(Produto produto) {
@@ -134,16 +135,16 @@ public class Loja {
     }
 
     public void venderProdutos(List<Produto> carrinho) {
+        // método para 'vender' todos os produtos do carrinho
         for (Produto produto : carrinho) {
             vender(produto);
         }
     }
 
     public void vender(Produto produto) {
-        // dar baixa no estoque
-        for (Categoria categoria : categorias)
-            if (categoria.getCodigo() == produto.getCategoria().getCodigo())
-                categoria.vender(produto);
+        // encontra a categoria do produto e realiza a venda do produto dentro da classe 'Categoria'
+        Categoria categoria = buscarCategoria(produto.getCategoria().getCodigo());
+        categoria.vender(produto);
     }
 
     public void imprimirCategorias() {
@@ -151,9 +152,8 @@ public class Loja {
             System.out.println("Não há categorias cadastradas!!");
             return;
         }
-        for (Categoria categoria : categorias) {
+        for (Categoria categoria : categorias)
             System.out.println(categoria.getCodigo() + " " + categoria.getNome() + " " + categoria.getDescricao());
-        }
     }
 
     public void imprimirProdutos() {
@@ -164,7 +164,16 @@ public class Loja {
         System.out.println("Produtos da " + getNome());
         for (Categoria categoria : categorias) {
             System.out.println("\nCategoria " + categoria.getNome());
-            categoria.imprimirProdutos();
+
+            List<Produto> listaProdutos = categoria.listarProdutos();
+
+            if (listaProdutos.isEmpty()) {
+                System.out.println("Não tem produtos!!!");
+            } else {
+                for (Produto produto : listaProdutos)
+                    System.out.println("\tID: " + produto.getId() + " | Nome: " + produto.getNome() + " | Preço: R$" + produto.getPreco());
+            }
+
         }
     }
 }
