@@ -126,11 +126,16 @@ public class Categoria {
     }
 
     public void vender (Produto produto) {
+        /*
+        essa função faz a 'venda' dos produtos e realiza a atualização do estoque dos produtos,
+        se acaso todas as unidades de determinado produto foram compradas, ele adiciona o id ao array 'ids'
+        esse que guardará todos os produtos que estão zerados e os removerá do estoque da loja
+         */
         List<Integer> ids = new ArrayList<Integer>();
 
         for (Produto prod : produtos) {
             if (prod.getId() == produto.getId()) {
-                prod.setQuantidade(produto.getQuantidade());
+                prod.setQuantidade(prod.getQuantidade() - produto.getQuantidade());
                 if (prod.getQuantidade() == 0) ids.add(prod.getId());
             }
         }

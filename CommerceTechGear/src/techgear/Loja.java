@@ -85,7 +85,6 @@ public class Loja {
         }
 
         // no caso de não existir a categoria
-        System.out.println("ERRO! CATEGORIA NÃO ENCONTRADA!");
         return null;
     }
 

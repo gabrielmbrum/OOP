@@ -7,7 +7,7 @@ public class ProdutoFisico extends Produto {
 
     // construtores
     public ProdutoFisico(int id, String nome, double preco, String descricao, String marca, Categoria categoria, double peso, String dimensoes) {
-        this(id, nome, preco, descricao, marca, categoria, 0, peso, dimensoes);
+        this(id, nome, preco, descricao, marca, categoria, 10, peso, dimensoes);
     }
 
     public ProdutoFisico(int id, String nome, double preco, String descricao, String marca, Categoria categoria, int estoque, double peso, String dimensoes) {

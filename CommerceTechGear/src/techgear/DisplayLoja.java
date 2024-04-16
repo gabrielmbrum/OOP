@@ -138,10 +138,10 @@ public class DisplayLoja {
 
     private void buscarProdutos() {
         int op = 1;
-        Produto produto;
+        Produto produto, aux = null;
 
         while (op != 0) {
-            System.out.println("\n\nDeseja buscar produto pelo:\n\t(1) Nome\n\t(2) ID\n\t(0) Voltar");
+            System.out.println("\nDeseja buscar produto pelo:\n\t(1) Nome\n\t(2) ID\n\t(0) Voltar\n");
             System.out.println("OPERAÇÃO: ");
             op = Main.sc.nextInt();
             Main.sc.nextLine();
@@ -150,9 +150,7 @@ public class DisplayLoja {
                     System.out.print("\nDigite o nome: ");
                     String nome = Main.sc.nextLine();
 
-                    produto = loja.buscarProduto(nome);
-
-                    if (produto != null) verificaProduto(produto);
+                    aux = loja.buscarProduto(nome);
                     break;
 
                 case 2:
@@ -160,12 +158,19 @@ public class DisplayLoja {
                     int id = Main.sc.nextInt();
                     Main.sc.nextLine();
 
-                    produto = loja.buscarProduto(id);
-
-                    if (produto != null) verificaProduto(produto);
+                    aux = loja.buscarProduto(id);
                     break;
 
                 case 0: return;
+            }
+            // cria fora do switch para evitar repetição de código
+            if (aux != null) {
+                if (aux instanceof ProdutoFisico)
+                    produto = new ProdutoFisico(aux.getId(), aux.getNome(), aux.getPreco(), aux.getDescricao(), aux.getMarca(), aux.getCategoria(), aux.getQuantidade(), ((ProdutoFisico) aux).getPeso(), ((ProdutoFisico) aux).getDimensoes());
+                else
+                    produto = new ProdutoVirtual(aux.getId(), aux.getNome(), aux.getPreco(), aux.getDescricao(), aux.getMarca(), aux.getCategoria(), aux.getQuantidade(), ((ProdutoVirtual) aux).getTamanhoArquivo(), ((ProdutoVirtual) aux).getFormato());
+
+                verificaProduto(produto);
             }
         }
 
@@ -199,7 +204,7 @@ public class DisplayLoja {
                     System.out.println("Esse produto já estava no carrinho! Sua quantidade foi alterada!");
                 } else {
                     while (qtd > produto.getQuantidade()) {
-                        System.out.print("QUANTIDADE INDISPONÍVEL!!!\nDigite uma quantidade menor: ");
+                        System.out.print("\tQUANTIDADE INDISPONÍVEL!!\n\tEstoque disponível: " + produto.getQuantidade() + "\nDigite uma quantidade menor: ");
                         qtd = Main.sc.nextInt();
                         Main.sc.nextLine();
                     }
@@ -429,7 +434,7 @@ public class DisplayLoja {
             System.out.print("Dimensoes: ");
             coringa2 = Main.sc.nextLine();
 
-            sucesso = adicionarProduto(new ProdutoFisico(id, nome, preco, descricao, marca, categoria, coringa1, coringa2));
+            sucesso = adicionarProduto(new ProdutoFisico(id, nome, preco, descricao, marca, categoria, quantidade, coringa1, coringa2));
         } else {
 
             System.out.print("Tamanho do arquivo (em GB): ");
@@ -439,11 +444,11 @@ public class DisplayLoja {
             System.out.print("Formato: ");
             coringa2 = Main.sc.nextLine();
 
-            sucesso = adicionarProduto(new ProdutoVirtual(id, nome, preco, descricao, marca, categoria, coringa1, coringa2));
+            sucesso = adicionarProduto(new ProdutoVirtual(id, nome, preco, descricao, marca, categoria, quantidade, coringa1, coringa2));
         }
 
         if (sucesso)
-            System.out.println("Produto adicionado com sucesso!!");
+            System.out.println("\n\tProduto adicionado com sucesso!!");
         else
             System.out.println("ERRO AO ADICIONAR PRODUTO!!!");
     }

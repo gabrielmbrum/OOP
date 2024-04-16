@@ -7,7 +7,13 @@ public class ProdutoVirtual extends Produto {
 
     // construtores
     public ProdutoVirtual(int id, String nome, double preco, String descricao, String marca, Categoria categoria, double tamanhoArquivo, String formato) {
-        super(id, nome, preco, descricao, marca, categoria, 0);
+        super(id, nome, preco, descricao, marca, categoria, 10);
+        this.tamanhoArquivo = tamanhoArquivo;
+        this.formato = formato;
+    }
+
+    public ProdutoVirtual(int id, String nome, double preco, String descricao, String marca, Categoria categoria, int quantidade, double tamanhoArquivo, String formato) {
+        super(id, nome, preco, descricao, marca, categoria, quantidade);
         this.tamanhoArquivo = tamanhoArquivo;
         this.formato = formato;
     }

@@ -24,8 +24,6 @@ public class Carrinho {
     public void removerProduto(Produto produto) {
        if (produtos.remove(produto))
            System.out.println("\nProduto removido do carrinho com sucesso!");
-       else
-           System.out.println("ERRO! Produto não encontrado!");
     }
 
     public void listarCarrinho () {
@@ -33,7 +31,7 @@ public class Carrinho {
         else {
             System.out.println("\nCarrinho: ");
             for (Produto produto : produtos) {
-                System.out.print("\t" + produto.getNome() + " | valor: R$");
+                System.out.print("\t" + produto.getNome() + " | qtd.: " + produto.getQuantidade() + "x | valor: R$");
                 System.out.format("%.2f\n", produto.getPreco());
             }
         }
@@ -62,7 +60,7 @@ public class Carrinho {
     public double valor () {
         double val = 0;
         for (Produto produto : produtos)
-            val = produto.getPreco() * produto.getQuantidade();
+            val += produto.getPreco() * produto.getQuantidade();
         return val;
     }
 }
