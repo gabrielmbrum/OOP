@@ -36,6 +36,6 @@ public class ProdutoVirtual extends Produto {
     }
 
     public void realizarDownload() {
-        System.out.println("\nArquivo '" + getNome() + "' Instalado!!\nFormato: " + getFormato() + " | Tamanho: " + getTamanhoArquivo() + " GB");
+        System.out.println("\nArquivo '" + getNome() + "' Instalado!! Tamanho: " + getTamanhoArquivo() + " GB | Formato: " + getFormato());
     }
 }

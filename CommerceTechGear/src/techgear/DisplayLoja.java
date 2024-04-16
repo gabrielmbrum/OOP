@@ -92,6 +92,7 @@ public class DisplayLoja {
         }
 
     }
+
     private void telaAdmin() {
         /*
         tela destinada ao adm, com verificação de usuário e senha, além de gerenciamento total da loja e seu conteúdo
@@ -217,21 +218,27 @@ public class DisplayLoja {
                 int qtd = Main.sc.nextInt();
                 Main.sc.nextLine();
 
+                while (qtd < 1) {
+                    System.out.print("Quantidade inválida! Digite novamente: ");
+                    qtd = Main.sc.nextInt();
+                    Main.sc.nextLine();
+                }
+
                 if (jaEstaNoCarrinho(produto.getId())) {
-                    while (qtd + carrinho.quantidadeExistente(produto.getId()) > produto.getQuantidade()) { // enquanto a quantidade desejada + quantidade ja adicionada ao carrinho for maior que a quantidade disponível
+                    while (qtd + carrinho.quantidadeExistente(produto.getId()) > produto.getQuantidade() || qtd < 1) { // enquanto a quantidade desejada + quantidade ja adicionada ao carrinho for maior que a quantidade disponível
                         System.out.print("QUANTIDADE INDISPONÍVEL!!!\nDigite uma quantidade menor: ");
                         qtd = Main.sc.nextInt();
                         Main.sc.nextLine();
                     }
-                    carrinho.aumentarQuantidade(produto.getId(), qtd);
+                    carrinho.aumentarQuantidade(produto.getId(), qtd); //atualiza a quantidade do produto no carrinho
                     System.out.println("Esse produto já estava no carrinho! Sua quantidade foi alterada!");
                 } else {
-                    while (qtd > produto.getQuantidade()) {
+                    while (qtd > produto.getQuantidade() || qtd < 1) {
                         System.out.print("\tQUANTIDADE INDISPONÍVEL!!\n\tEstoque disponível: " + produto.getQuantidade() + "\nDigite uma quantidade menor: ");
                         qtd = Main.sc.nextInt();
                         Main.sc.nextLine();
                     }
-                    produto.atualizarEstoque(qtd);
+                    produto.atualizarEstoque(qtd); //altera a quantiade para somente a quantidade que o usuário irá comprar
                     adicionarAoCarrinho(produto);
                 }
             }
@@ -240,7 +247,7 @@ public class DisplayLoja {
 
     void adicionarAoCarrinho(Produto produto) {
         carrinho.getProdutos().add(produto);
-        System.out.println("Produto adicionado ao carrinho com sucesso!!!");
+        System.out.println("\n\tProduto adicionado ao carrinho com sucesso!!!");
     }
 
     private void removerItemDoCarrinho() {
@@ -287,8 +294,12 @@ public class DisplayLoja {
     }
 
     void realizarCompra() {
-        System.out.println("Valor da compra: R$" + carrinho.valor());
-        System.out.println("Frete: R$ " + carrinho.maiorFrete());
+        double subtotal = carrinho.valor(), frete = carrinho.maiorFrete();
+
+        System.out.print("\nSubtotal: R$"); System.out.format(" %.2f\n", subtotal);
+        System.out.print("Frete: R$"); System.out.format(" %.2f\n", frete);
+        System.out.print("\nTOTAL: R$"); System.out.format(" %.2f\n", subtotal+frete);
+
         loja.venderProdutos(carrinho.getProdutos());
         carrinho.getProdutos().clear(); //limpa o carrinho
     }
