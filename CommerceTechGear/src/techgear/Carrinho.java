@@ -20,10 +20,6 @@ public class Carrinho {
         return produtos;
     }
 
-    public void setProdutos(List<Produto> produtos) {
-        this.produtos = produtos;
-    }
-
     // métodos
     public void removerProduto(Produto produto) {
        if (produtos.remove(produto))

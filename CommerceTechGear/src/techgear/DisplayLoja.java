@@ -62,7 +62,7 @@ public class DisplayLoja {
 
     }
 
-    public void telaUsuario() {
+    private void telaUsuario() {
         int op = 1;
 
         System.out.println("\n====================||===========||=================\n");
@@ -73,11 +73,7 @@ public class DisplayLoja {
             telaOpcoesUsuario();
             op = Main.sc.nextInt();
             Main.sc.nextLine();
-            // (1) Buscar Produto
-            //	(2) Visualizar Carrinho
-            //	(3) Remover item do Carrinho
-            //	(4) Realizar Compra
-            //	(5) Listar Produtos
+
             switch (op) {
                 case 0: return;
                 case 1: buscarProdutos(); break;
@@ -89,11 +85,8 @@ public class DisplayLoja {
             }
         }
 
-        //(1) Buscar Produto\n\t(2) Visualizar Carrinho\n\t(3) Remover item do Carrinho\n\t(4) Realizar Compra\n\t(5) Listar Produtos(0) Sair");
-
     }
-    public void telaAdmin() {
-        // campos
+    private void telaAdmin() {
         String senha, usuario;
         int count = 0, op;
 
@@ -113,6 +106,7 @@ public class DisplayLoja {
             count++;
 
         } while( ( !(admin.getSenha().equals(senha)) || !(admin.getUsuario().equals(usuario)) ) && count < 5);
+        // possui máximo de 5 tentativas de login
 
         if (count == 5) {
             System.out.println("Limite de tentativas de login atingido!!!");
@@ -129,7 +123,7 @@ public class DisplayLoja {
             op = Main.sc.nextInt();
             Main.sc.nextLine();
         }
-        // (1) Gerenciar Produtos(2) Gerenciar Categorias(3) Gerenciar Loja(4) Listar Produtos(0) Sair");
+
         while (op != 0) {
             switch (op) {
                 case 1: gerenciarProdutos(); break;
@@ -142,7 +136,7 @@ public class DisplayLoja {
         }
     }
 
-    void buscarProdutos() {
+    private void buscarProdutos() {
         int op = 1;
         Produto produto;
 
@@ -177,7 +171,6 @@ public class DisplayLoja {
 
     }
 
-    // mostra qual o produto encontrado e da opção para o usuário escolher se quer adicionar ao carrinho ou não
     private void verificaProduto(Produto produto) {
         if (produto != null) {
             char c = 'c';
@@ -217,12 +210,12 @@ public class DisplayLoja {
         }
     }
 
-    void adicionarAoCarrinho(Produto produto) {
+    private void adicionarAoCarrinho(Produto produto) {
         carrinho.getProdutos().add(produto);
         System.out.println("Produto adicionado ao carrinho com sucesso!!!");
     };
 
-    void removerItemDoCarrinho() {
+    private void removerItemDoCarrinho() {
         int op = 1;
         Produto produto;
 
@@ -257,20 +250,20 @@ public class DisplayLoja {
         }
     }
 
-    boolean jaEstaNoCarrinho(int id) {
+    private boolean jaEstaNoCarrinho(int id) {
         if (carrinho.contem(id)) // precisei criar um método contem pq não podia usar o 'contains()' pelo motivo dele comparar o objeto completamente, sendo que as quantidades seriam diferentes
             return true;
 
         return false;
     }
 
-    void realizarCompra() {
+    private void realizarCompra() {
         System.out.println("Valor da compra: R$" + carrinho.valor());
         loja.venderProdutos(carrinho.getProdutos());
         carrinho.getProdutos().clear(); //limpa o carrinho
     }
 
-    void gerenciarCategorias() {
+    private void gerenciarCategorias() {
         int id, op = 1;
 
         while (op!=0) {
@@ -289,7 +282,7 @@ public class DisplayLoja {
         }
     }
 
-    void gerenciarProdutos() {
+    private void gerenciarProdutos() {
         int id, op = 1;
 
         while (op!=0) {
@@ -308,7 +301,7 @@ public class DisplayLoja {
         }
     }
 
-    void gerenciarLoja() {
+    private void gerenciarLoja() {
         String aux; int op = 1;
 
         while (op!=0) {
@@ -327,13 +320,13 @@ public class DisplayLoja {
         }
     }
 
-    public void telaOpcoesUsuario () {
+    private void telaOpcoesUsuario () {
         System.out.println("\nDigite qual operação você deseja realizar:");
         System.out.println("\t(1) Buscar Produto\n\t(2) Visualizar Carrinho\n\t(3) Remover item do Carrinho\n\t(4) Realizar Compra\n\t(5) Listar Produtos\n\t(0) Sair");
         System.out.print("\nOPERAÇÃO: ");
     }
 
-    public void telaOpcoesAdmin () {
+    private void telaOpcoesAdmin () {
         System.out.println("\nDigite qual operação você deseja realizar:");
         System.out.println("\t(1) Gerenciar Produtos\n\t(2) Gerenciar Categorias\n\t(3) Gerenciar Loja\n\t(0) Sair");
         System.out.print("\nOPERAÇÃO: ");
@@ -361,7 +354,7 @@ public class DisplayLoja {
             linha = scanner.nextLine();
             campos = linha.split("#");
 
-            loja.adicionarCategoria( new Categoria(Integer.parseInt(campos[0]), campos[1], campos[2]) );
+            loja.adicionarCategoria(new Categoria(Integer.parseInt(campos[0]), campos[1], campos[2]) );
         }
 
         System.out.println("\nCategorias adicionadas com sucesso!!!");
@@ -507,15 +500,15 @@ public class DisplayLoja {
         System.out.println("\nProdutos adicionados com sucesso!!!");
     }
 
-    public void visualizarCarrinho () {
+    private void visualizarCarrinho () {
         carrinho.listarCarrinho();
     }
 
-    public boolean adicionarProduto (ProdutoVirtual produtoVirtual) {
+    private boolean adicionarProduto (ProdutoVirtual produtoVirtual) {
         return (loja.adicionarProduto(produtoVirtual));
     }
 
-    public boolean adicionarProduto (ProdutoFisico produtoFisico) {
+    private boolean adicionarProduto (ProdutoFisico produtoFisico) {
         return (loja.adicionarProduto(produtoFisico));
     }
 }

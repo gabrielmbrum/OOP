@@ -10,7 +10,7 @@ public abstract class Produto {
     private Categoria categoria;
     private int quantidade;
 
-    // constructor
+    // construtores
     public Produto () {
         this(0, "null", 0, "null", "null", new Categoria(), 0);
     }
@@ -26,7 +26,6 @@ public abstract class Produto {
     }
 
     // getters and setters
-
     public int getId() {
         return id;
     }
@@ -83,8 +82,7 @@ public abstract class Produto {
         this.quantidade = quantidade;
     }
 
-    // required methods
-
+    // métodos
     public void atualizarEstoque (int quantidade) {
         setQuantidade(quantidade);
     }
@@ -92,6 +90,4 @@ public abstract class Produto {
     public void atualizaPreco(double novoPreco) {
         this.preco = novoPreco;
     }
-
-    // extra methods
 }

@@ -1,11 +1,12 @@
 package techgear;
 
 public class Admin {
+    // campos
     private String cpf;
     private String usuario;
     private String senha;
 
-    // constructor
+    // construtor
     public Admin(String cpf, String usuario, String senha) {
         this.cpf = cpf;
         this.usuario = usuario;

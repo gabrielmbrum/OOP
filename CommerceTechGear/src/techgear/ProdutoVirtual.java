@@ -1,20 +1,18 @@
 package techgear;
 
 public class ProdutoVirtual extends Produto {
-    // fields
+    // campos
     private double tamanhoArquivo;
     private String formato;
 
-    // constructor
-
+    // construtores
     public ProdutoVirtual(int id, String nome, double preco, String descricao, String marca, Categoria categoria, double tamanhoArquivo, String formato) {
         super(id, nome, preco, descricao, marca, categoria, 0);
         this.tamanhoArquivo = tamanhoArquivo;
         this.formato = formato;
     }
 
-    // getters and setters
-
+    // métodos
     public double getTamanhoArquivo() {
         return tamanhoArquivo;
     }
@@ -31,10 +29,7 @@ public class ProdutoVirtual extends Produto {
         this.formato = formato;
     }
 
-    // required method
     public void realizarDownload() {
-        // procedimento de instalação...
-
-        System.out.println("\nproduto instalado!");
+        System.out.println("\nArquivo Instalado!!\nNome: " + getNome() + " | Formato: " + getFormato() + " | Tamanho: " + getTamanhoArquivo() + " GB");
     }
 }

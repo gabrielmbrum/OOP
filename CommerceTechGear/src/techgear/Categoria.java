@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Categoria {
-    // fields
+    // campos
     private int codigo;
     private String nome;
     private String descricao;
     private List<Produto> produtos;
 
-    // constructor
+    // construtores
     public Categoria () {
         this(0, "null", "null", new ArrayList<>());
     }
 
     public Categoria (int codigo, String nome, String descricao) {
-        this(codigo, nome, descricao, new ArrayList<>());
+        this(codigo, nome, descricao, new ArrayList<Produto>());
     }
 
     public Categoria(int codigo, String nome, String descricao, List<Produto> produtos) {
@@ -59,7 +59,7 @@ public class Categoria {
         this.produtos = produtos;
     }
 
-    // required methods
+    // métodos
     public boolean adicionarProduto (Produto produto) {
         if (produtoJaExiste(produto)) {
             System.out.println("Produto já existente!");
@@ -67,7 +67,7 @@ public class Categoria {
         }
         produtos.add(produto);
         return true;
-    };
+    }
 
     public void removerProduto (int id, boolean admin) {
         // percorre a array de produtos e quando encontra o id correspondente, remove o produto e encerra
@@ -81,7 +81,7 @@ public class Categoria {
 
         // caso o produto já exista
         System.out.println("ERRO!! PRODUTO NÃO EXISTENTE!!");
-    };
+    }
 
     public Produto buscarProduto (int id) {
         // percorre o array buscando correspondencia pelo id, entao o retorna
@@ -107,9 +107,8 @@ public class Categoria {
 
     public List<Produto> listarProdutos() {
         return produtos;
-    };
+    }
 
-    // extra methods
     public boolean produtoJaExiste(Produto produto) {
         // loop para checar todos os produtos do array e retornar true caso o produto com aquele id ja existir
         for (Produto value : produtos) {
