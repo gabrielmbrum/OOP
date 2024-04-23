@@ -3,10 +3,10 @@ package passagemAerea;
 import java.time.LocalDateTime;
 
 public abstract class PassagemAbstrata implements Passagem {
-    String codigo;
-    double preco;
-    LocalDateTime dataHora;
-    String origem, destino;
+    String codigo = "teste";
+    double preco = 100;
+    LocalDateTime dataHora = LocalDateTime.of(2012, 6, 30, 12, 0);
+    String origem = "x", destino = "y";
 
     @Override
     public String getCodigo() {
@@ -16,6 +16,10 @@ public abstract class PassagemAbstrata implements Passagem {
     @Override
     public double getPreco() {
         return preco;
+    }
+
+    public void setPreco(double newPreco) {
+        preco = newPreco;
     }
     @Override
     public LocalDateTime getDataHora() {

@@ -3,14 +3,21 @@ package passagemAerea;
 import java.util.List;
 
 public class SistemaReservas {
+    // fields
     List<Passagem> passagens;
+    //constructor
+    public SistemaReservas(List<Passagem> passagens) {
+        this.passagens = passagens;
+    }
 
     // methods
     public void adicionarPassagem(Passagem passagem) {
+        passagens.add(passagem);
         System.out.println("passagem adicionada com sucesso!!");
     }
 
     public void removerPassagem(String codigo) {
+        passagens.removeIf(passagem -> (passagem.getCodigo().equals(codigo)));
         System.out.println("passagem removida com sucesso!!");
     }
 
