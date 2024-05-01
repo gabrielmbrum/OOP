@@ -1,16 +1,13 @@
-package CommerceTechGear;
-
-import CommerceTechGear.Categoria;
-import CommerceTechGear.Produto;
+package techgear;
 
 public class ProdutoFisico extends Produto {
-    // fields
+    // campos
     private double peso;
     private String dimensoes;
 
-    // constructor
+    // construtores
     public ProdutoFisico(int id, String nome, double preco, String descricao, String marca, Categoria categoria, double peso, String dimensoes) {
-        this(id, nome, preco, descricao, marca, categoria, 0, peso, dimensoes);
+        this(id, nome, preco, descricao, marca, categoria, 10, peso, dimensoes);
     }
 
     public ProdutoFisico(int id, String nome, double preco, String descricao, String marca, Categoria categoria, int estoque, double peso, String dimensoes) {
@@ -20,7 +17,6 @@ public class ProdutoFisico extends Produto {
     }
 
     // getters and setters
-
     public double getPeso() {
         return peso;
     }
@@ -37,8 +33,7 @@ public class ProdutoFisico extends Produto {
         this.dimensoes = dimensoes;
     }
 
-    // required method
-
+    // métodos
     public double calcularFrete () {
         // se é mais peso que 20kg usa a formula, caso contrario é o valor padrão de entrega
         if (peso > 20)

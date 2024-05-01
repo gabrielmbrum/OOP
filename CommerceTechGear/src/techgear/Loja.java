@@ -1,24 +1,18 @@
-package CommerceTechGear;
-
-import CommerceTechGear.Categoria;
-import CommerceTechGear.DisplayLoja;
+package techgear;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Loja extends Categoria {
-    // fields
+public class Loja {
+    // campos
     private String nome;
     private String cnpj;
     private String endereco;
     private List<Categoria> categorias;
 
-    // constructor
-    public Loja () {
-        this("loja");
-    }
+    // construtores
     public Loja(String nome) {
-        this(nome, "null", "null", new ArrayList<>());
+        this(nome, "null", "null", new ArrayList<Categoria>());
     }
     public Loja(String nome, String cnpj, String endereco, List<Categoria> categorias) {
         this.nome = nome;
@@ -60,31 +54,29 @@ public class Loja extends Categoria {
         this.categorias = categorias;
     }
 
-    // required methods
+    // métodos
     public void adicionarCategoria(Categoria categoria) {
-        categorias.add(categoria);
-    };
+        if (buscarCategoria(categoria.getNome()) == null)
+            categorias.add(categoria);
+        else
+            System.out.println("ERRO!! Categoria já existente!!");
+    }
 
-    public void adicionarProduto(Produto produto) {
-        // verifica se o produto ja existe
+    public boolean adicionarProduto(Produto produto) {
+        return produto.getCategoria().adicionarProduto(produto);
+    }
+
+    public Categoria buscarCategoria(int codigo) {
+        // percorre o array de categorias até encontrar um nome igual, assim o retornando
         for (Categoria categoria : categorias) {
-            if (categoria.produtoJaExiste(produto)) {
-                System.out.println("Produto já existente!");
-                return;
-            }
+            if (categoria.getCodigo() == codigo)
+                return categoria;
         }
 
-        // procura por meio da comparação do id da categoria do produto e adiciona na categoria correta
-        for (Categoria categoria : categorias) {
-            if (produto.getCategoria().getCodigo() == categoria.getCodigo()) {
-                categoria.adicionarProduto(produto);
-                return;
-            }
-        }
-
-        System.out.println("Produto possue categoria inválida!!");
-        return;
-    };
+        // no caso de não existir a categoria
+        System.out.println("ERRO! CATEGORIA NÃO ENCONTRADA!");
+        return null;
+    }
 
     public Categoria buscarCategoria(String nome) {
         // percorre o array de categorias até encontrar um nome igual, assim o retornando
@@ -94,39 +86,34 @@ public class Loja extends Categoria {
         }
 
         // no caso de não existir a categoria
-        System.out.println("ERRO! CATEGORIA NÃO ENCONTRADA!");
         return null;
-    };
+    }
 
     public Produto buscarProduto(int id) {
         // busca dentro de cada categoria, passando por seu respectivo array de produtos, até encontrar o produto desejado e o remover
         for (Categoria categoria : categorias) {
-            for (Produto produto : categoria.getProdutos()) {
-                if (produto.getId() == id) {
-                    return produto;
-                }
-            }
+            Produto produto = categoria.buscarProduto(id);
+            if (produto != null) return produto;
         }
 
-        // no caso de não existir a categoria
+        // no caso de não existir a categoria, retorna nulo
         System.out.println("ERRO! PRODUTO NÃO ENCONTRADO!");
         return null;
-    };
+    }
 
     public Produto buscarProduto (String nome) {
         // busca dentro de cada array de produtos dentro de cada posição do array de categorias, até encontrar o produto e o retorna
+        Produto produto;
+
         for (Categoria categoria : categorias) {
-            for (Produto produto : categoria.getProdutos()) {
-                if (produto.getNome().equals(nome)) {
-                    return produto;
-                }
-            }
+            produto = categoria.buscarProduto(nome);
+            if (produto != null) return produto;
         }
 
         // caso de não encontrar o produto
         System.out.println("ERRO! PRODUTO NÃO ENCONTRADO!!");
         return null;
-    };
+    }
 
     public void removerProduto(int id) {
         // busca dentro de cada array de produtos dentro de cada posição do array de categorias, então o remove
@@ -141,33 +128,52 @@ public class Loja extends Categoria {
 
         // caso não encontre o produto
         System.out.println("ERRO!! PRODUTO NÃO EXISTENTE!!");
-    };
+    }
 
-    // extra methods
-    public void imprimirCategorias() {
-        for (Categoria categoria : categorias) {
-            System.out.println(categoria.getCodigo() + " " + categoria.getNome() + " " + categoria.getDescricao());
+    public void removerCategoria(int id) {
+        categorias.removeIf(categoria -> categoria.getCodigo() == id);
+    }
+
+    public void venderProdutos(List<Produto> carrinho) {
+        // método para 'vender' todos os produtos do carrinho
+        for (Produto produto : carrinho) {
+            vender(produto);
         }
     }
 
-    public Categoria buscarCategoria(int codigo) {
-        // percorre o array de categorias até encontrar um nome igual, assim o retornando
-        for (Categoria categoria : categorias) {
-            if (categoria.getCodigo() == codigo)
-                return categoria;
-        }
+    public void vender(Produto produto) {
+        // encontra a categoria do produto e realiza a venda do produto dentro da classe 'Categoria'
+        Categoria categoria = buscarCategoria(produto.getCategoria().getCodigo());
+        categoria.vender(produto);
+    }
 
-        // no caso de não existir a categoria
-        System.out.println("ERRO! CATEGORIA NÃO ENCONTRADA!");
-        return null;
-    };
+    public void imprimirCategorias() {
+        if (categorias.isEmpty()) {
+            System.out.println("Não há categorias cadastradas!!");
+            return;
+        }
+        for (Categoria categoria : categorias)
+            System.out.println(categoria.getCodigo() + " " + categoria.getNome() + " " + categoria.getDescricao());
+    }
 
     public void imprimirProdutos() {
+        if (categorias.isEmpty()) {
+            System.out.println("Não existe produtos cadastrados!!");
+            return;
+        }
+        System.out.println("Produtos da " + getNome());
         for (Categoria categoria : categorias) {
-            System.out.println("Categoria: " + categoria.getCodigo());
-            for (Produto produto : categoria.getProdutos()) {
-                System.out.println("\t" + produto.getId() + " " + produto.getNome());
+            System.out.println("\nCategoria " + categoria.getNome());
+
+            List<Produto> listaProdutos = categoria.listarProdutos();
+
+            if (listaProdutos.isEmpty()) {
+                System.out.println("Não tem produtos!!!");
+            } else {
+                for (Produto produto : listaProdutos)
+                    System.out.println("\tID: " + produto.getId() + " | Nome: " + produto.getNome() + " | Preço: R$" + produto.getPreco());
             }
+
         }
     }
 }

@@ -1,6 +1,4 @@
-package CommerceTechGear;
-
-import CommerceTechGear.Categoria;
+package techgear;
 
 public abstract class Produto {
     // fields
@@ -12,7 +10,7 @@ public abstract class Produto {
     private Categoria categoria;
     private int quantidade;
 
-    // constructor
+    // construtores
     public Produto () {
         this(0, "null", 0, "null", "null", new Categoria(), 0);
     }
@@ -28,7 +26,6 @@ public abstract class Produto {
     }
 
     // getters and setters
-
     public int getId() {
         return id;
     }
@@ -47,10 +44,6 @@ public abstract class Produto {
 
     public double getPreco() {
         return preco;
-    }
-
-    public void setPreco(double preco) {
-        atualizaPreco(preco);
     }
 
     public String getDescricao() {
@@ -81,19 +74,12 @@ public abstract class Produto {
         return quantidade;
     }
 
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    // required methods
-
+    // métodos
     public void atualizarEstoque (int quantidade) {
-        setQuantidade(quantidade);
+        this.quantidade = quantidade;
     }
 
     public void atualizaPreco(double novoPreco) {
         this.preco = novoPreco;
     }
-
-    // extra methods
 }
