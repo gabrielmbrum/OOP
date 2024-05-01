@@ -169,7 +169,7 @@ public class DisplayLoja extends Loja {
                                         String[] parts = campos[6].split(" ");
                                         campos[6] = parts[0];
 
-                                        ProdutoVirtual produtoVirtual = new ProdutoVirtual(Integer.parseInt(campos[0]), campos[1], Double.parseDouble(campos[2]), campos[3], campos[4], categoria, Double.parseDouble(campos[6]), campos[7])
+                                        ProdutoVirtual produtoVirtual = new ProdutoVirtual(Integer.parseInt(campos[0]), campos[1], Double.parseDouble(campos[2]), campos[3], campos[4], categoria, Double.parseDouble(campos[6]), campos[7]);
 
                                         if (adicionarProduto(produtoVirtual))
                                             System.out.println("Produto adicionado com sucesso!!");
@@ -300,9 +300,7 @@ public class DisplayLoja extends Loja {
         carrinho.listarCarrinho();
     }
 
-    public boolean adicionarProduto (Produto produto) {
 
-    }
 
 }
 

@@ -83,6 +83,7 @@ public class Loja extends Categoria {
         }
 
         System.out.println("Produto possue categoria inválida!!");
+        return;
     };
 
     public Categoria buscarCategoria(String nome) {
