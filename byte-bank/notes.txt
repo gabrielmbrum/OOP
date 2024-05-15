@@ -1,0 +1,3 @@
+to connect by terminal using sql commands
+    \sql
+    \connect root@localhost
