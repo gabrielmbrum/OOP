@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
-
+// Data Access Object
 public class ContaDAO {
     private Connection conn;
     ContaDAO (Connection connection) {
@@ -19,10 +19,10 @@ public class ContaDAO {
 
     public void salvar(DadosAberturaConta dadosDaConta) {
         var cliente = new Cliente(dadosDaConta.dadosCliente());
-        var conta = new Conta(dadosDaConta.numero(), cliente);
+        var conta = new Conta(dadosDaConta.numero(), BigDecimal.ZERO, cliente, true);
 
-        String sql = "INSERT INTO conta (numero, saldo, cliente_nome, cliente_cpf, cliente_email)" +
-                "VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO conta (numero, saldo, cliente_nome, cliente_cpf, cliente_email, esta_ativa)" +
+                "VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
             PreparedStatement preparedStatement = conn.prepareStatement(sql); //seta os valores do parâmetro
@@ -32,6 +32,7 @@ public class ContaDAO {
             preparedStatement.setString(3, dadosDaConta.dadosCliente().nome());
             preparedStatement.setString(4, dadosDaConta.dadosCliente().cpf());
             preparedStatement.setString(5, dadosDaConta.dadosCliente().email());
+            preparedStatement.setBoolean(6, true);
 
             preparedStatement.execute();
             preparedStatement.close();
@@ -41,12 +42,47 @@ public class ContaDAO {
         }
     }
 
+    public Set<Conta> listar() {
+        PreparedStatement ps;
+        ResultSet rs;
+
+        Set<Conta> contas = new HashSet<>();
+        String sql = "SELECT * FROM conta WHERE esta_ativa=true";
+
+        try {
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery(); //retorna o result set, retorna o resultado da query
+
+            while (rs.next()) {
+                Integer numero = rs.getInt(1);
+                BigDecimal saldo = rs.getBigDecimal(2);
+                String nome = rs.getString(3);
+                String cpf = rs.getString(4);
+                String email = rs.getString(5);
+                Boolean estaAtiva = rs.getBoolean(6);
+
+                DadosCadastroCliente dadosCadastroCliente =
+                        new DadosCadastroCliente(nome, cpf, email);
+                Cliente cliente = new Cliente(dadosCadastroCliente);
+
+                contas.add(new Conta(numero, saldo, cliente, estaAtiva));
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e ){
+            throw new RuntimeException(e);
+        }
+
+        return contas;
+    }
+
     public Conta listarPorNumero(Integer numero) {
         PreparedStatement ps;
         ResultSet rs;
         Conta conta = null;
 
-        String sql = "SELECT * FROM conta WHERE numero = ?";
+        String sql = "SELECT * FROM conta WHERE numero = ? AND esta_ativa=true";
 
         try {
             ps = conn.prepareStatement(sql);
@@ -59,11 +95,12 @@ public class ContaDAO {
                 String nome = rs.getString(3);
                 String cpf = rs.getString(4);
                 String email = rs.getString(5);
+                Boolean estaAtiva = rs.getBoolean(6);
 
                 DadosCadastroCliente dadosCadastroCliente =
                         new DadosCadastroCliente(nome, cpf, email);
                 Cliente cliente = new Cliente(dadosCadastroCliente);
-                conta = new Conta(numeroRecuperado, cliente);
+                conta = new Conta(numeroRecuperado, saldo, cliente, estaAtiva);
             }
 
             rs.close();
@@ -76,36 +113,64 @@ public class ContaDAO {
 
         return conta;
     }
-    public Set<Conta> listar() {
-        PreparedStatement ps;
-        ResultSet rs;
 
-        Set<Conta> contas = new HashSet<>();
-        String sql = "SELECT * FROM conta";
+    public void alterar(Integer numero, BigDecimal valor) {
+        PreparedStatement ps;
+        String sql = "UPDATE conta SET saldo = ? WHERE numero = ?";
 
         try {
+            conn.setAutoCommit(false);
+
             ps = conn.prepareStatement(sql);
-            rs = ps.executeQuery();
 
-            while (rs.next()) {
-                Integer numero = rs.getInt(1);
-                BigDecimal saldo = rs.getBigDecimal(2);
-                String nome = rs.getString(3);
-                String cpf = rs.getString(4);
-                String email = rs.getString(5);
-                DadosCadastroCliente dadosCadastroCliente =
-                        new DadosCadastroCliente(nome, cpf, email);
-                Cliente cliente = new Cliente(dadosCadastroCliente);
-                contas.add(new Conta(numero, cliente));
-            }
+            ps.setBigDecimal(1, valor);
+            ps.setInt(2, numero);
 
-            rs.close();
+            ps.execute(); //retorna um booleano
+            conn.commit();
             ps.close();
-        } catch (SQLException e ){
+            conn.close();
+        } catch (SQLException e) {
+            try {
+                conn.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             throw new RuntimeException(e);
         }
-
-        return contas;
     }
 
+    public void deletar (Integer numeroDaConta) {
+        String sql = "DELETE FROM conta WHERE numero = ?";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setInt(1, numeroDaConta);
+
+            ps.execute();
+            ps.close();
+            conn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void alterarLogico (Integer numeroDaConta) {
+        PreparedStatement ps;
+        String sql = "UPDATE conta SET esta_ativa = false WHERE numero = ?";
+
+        try {
+
+            ps = conn.prepareStatement(sql);
+
+            ps.setInt(1, numeroDaConta);
+
+            ps.execute(); //retorna um booleano
+            ps.close();
+            conn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
