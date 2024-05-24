@@ -70,6 +70,7 @@ public class ContaDAO {
 
             rs.close();
             ps.close();
+            conn.close();
         } catch (SQLException e ){
             throw new RuntimeException(e);
         }
