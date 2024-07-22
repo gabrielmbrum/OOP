@@ -3,13 +3,11 @@ import br.com.alura.controllers.TimeCalculator;
 import br.com.alura.models.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Main {
     public static void main(String[] args) {
-        Movie meuFilme = new Movie();
-        meuFilme.setName("O poderoso chefão");
-        meuFilme.setReleaseYear(1970);
-        meuFilme.setDurationInMin(180);
+        Movie meuFilme = new Movie("O poderoso chefão", 1970, true, 0, 0,180, "Chefão");
         System.out.println("Duração do filme: " + meuFilme.getDurationInMin());
 
         meuFilme.displayInfo();
@@ -22,19 +20,10 @@ public class Main {
         //meuFilme.totalDeAvaliacoes = 1;
         //System.out.println(meuFilme.pegaMedia());
 
-        Series lost = new Series();
-        lost.setName("Lost");
-        lost.setReleaseYear(2000);
-        lost.displayInfo();
-        lost.setSeasons(10);
-        lost.setEpisodesBySeason(10);
-        lost.setMinPerEpisode(50);
+        Series lost = new Series("Lost", 2000, true, 0, 0, 0, 10, 10, true, 50);
         System.out.println("Duração para maratonar Lost: " + lost.getDurationInMin());
 
-        Movie outroFilme = new Movie();
-        outroFilme.setName("Avatar");
-        outroFilme.setReleaseYear(2023);
-        outroFilme.setDurationInMin(200);
+        Movie outroFilme = new Movie("Avatar", 2023, true, 0, 0, 200, "Avatão");
 
         TimeCalculator calculadora = new TimeCalculator();
         calculadora.include(meuFilme);
@@ -59,7 +48,25 @@ public class Main {
         listaDeFilme.add(meuFilme);
         listaDeFilme.add(outroFilme);
         System.out.println("Tamanho da lista: " + listaDeFilme.size());
-        System.out.println("Primeiro filme: " + listaDeFilme.get(0).getName());
+        System.out.println("Primeiro filme:\n" + listaDeFilme.get(0).toString() + "\n");
 
+        ArrayList<Title> titulosAssistidos = new ArrayList<>();
+        titulosAssistidos.add(filmeDoPaulo);
+        titulosAssistidos.add(lost);
+        System.out.println("Filmes assistidos:");
+        titulosAssistidos.forEach(titulo -> System.out.println(titulo.toString()));
+
+        System.out.println("\nFilmes assistidos c/  classificacao:");
+        for (Title tituloAssistido : titulosAssistidos) {
+            System.out.println("\t" + tituloAssistido.toString());
+            if (tituloAssistido instanceof Movie m) {
+                System.out.println("\t-> classificação " + m.getClassificacao());
+            }
+        }
+
+        Collections.sort(titulosAssistidos);
+
+        System.out.println("\nFilmes assistidos c/  ordenação:");
+        titulosAssistidos.forEach(titulo -> System.out.println(titulo.toString()));
     }
 }
