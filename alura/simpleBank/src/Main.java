@@ -53,7 +53,9 @@ public class Main {
                     ac.setBalance(ac.getBalance() - valorTrasnferencia);
                 break;
 
-            case 3: return;
+            case 3:
+                System.out.println("Opção inválida!!");
+                return;
         }
 
         MainScreen(ac);
