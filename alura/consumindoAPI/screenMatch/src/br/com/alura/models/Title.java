@@ -1,14 +1,22 @@
 package br.com.alura.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public abstract class Title implements Comparable<Title> {
+    @SerializedName("Title")
     private String name;
+
+    @SerializedName("Year")
     private int releaseYear;
+
     private boolean includedOnPlan;
     private double sumOfRates;
     private int totalOfRates = 0;
-    private int durationInMin;
 
-    public Title(String name, int releaseYear, boolean includedOnPlan, double sumOfRates, int totalOfRates, int durationInMin) {
+    @SerializedName("Runtime")
+    private String durationInMin;
+
+    public Title(String name, int releaseYear, boolean includedOnPlan, double sumOfRates, int totalOfRates, String durationInMin) {
         this.name = name;
         this.releaseYear = releaseYear;
         this.includedOnPlan = includedOnPlan;
@@ -17,11 +25,17 @@ public abstract class Title implements Comparable<Title> {
         this.durationInMin = durationInMin;
     }
 
+    public Title (OMBDbTitle ombDbTitle) {
+        this.name = ombDbTitle.title();
+        this.releaseYear = Integer.parseInt(ombDbTitle.year());
+        this.durationInMin = ombDbTitle.runtime().substring(0, ombDbTitle.runtime().length() - 4); //-4 because it's to remove the " min" chars
+    }
+
     public int getTotalOfRates() {
         return totalOfRates;
     }
 
-    public int getDurationInMin() {
+    public String getDurationInMin() {
         return durationInMin;
     }
 

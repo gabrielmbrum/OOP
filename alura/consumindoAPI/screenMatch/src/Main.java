@@ -7,7 +7,7 @@ import java.util.Collections;
 
 public class Main {
     public static void main(String[] args) {
-        Movie meuFilme = new Movie("O poderoso chefão", 1970, true, 0, 0,180, "Chefão");
+        Movie meuFilme = new Movie("O poderoso chefão", 1970, true, 0, 0,"180", "Chefão");
         System.out.println("Duração do filme: " + meuFilme.getDurationInMin());
 
         meuFilme.displayInfo();
@@ -20,10 +20,10 @@ public class Main {
         //meuFilme.totalDeAvaliacoes = 1;
         //System.out.println(meuFilme.pegaMedia());
 
-        Series lost = new Series("Lost", 2000, true, 0, 0, 0, 10, 10, true, 50);
+        Series lost = new Series("Lost", 2000, true, 0, 0, "0", 10, 10, true, 50);
         System.out.println("Duração para maratonar Lost: " + lost.getDurationInMin());
 
-        Movie outroFilme = new Movie("Avatar", 2023, true, 0, 0, 200, "Avatão");
+        Movie outroFilme = new Movie("Avatar", 2023, true, 0, 0, "200", "Avatão");
 
         TimeCalculator calculadora = new TimeCalculator();
         calculadora.include(meuFilme);
@@ -40,7 +40,7 @@ public class Main {
         episodio.setTotalOfViews(300);
         filtro.filter(episodio);
 
-        var filmeDoPaulo = new Movie("Dogville", 2003, true, 0, 0, 200, "Paulo");
+        var filmeDoPaulo = new Movie("Dogville", 2003, true, 0, 0, "200", "Paulo");
         filmeDoPaulo.rate(10);
 
         ArrayList<Movie> listaDeFilme = new ArrayList<>();

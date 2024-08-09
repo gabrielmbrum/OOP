@@ -8,7 +8,7 @@ public class Series extends Title implements Classificable {
     private boolean active;
     private int minPerEpisode;
 
-    public Series(String name, int releaseYear, boolean includedOnPlan, double sumOfRates, int totalOfRates, int durationInMin, int seasons, int episodesBySeason, boolean active, int minPerEpisode) {
+    public Series(String name, int releaseYear, boolean includedOnPlan, double sumOfRates, int totalOfRates, String durationInMin, int seasons, int episodesBySeason, boolean active, int minPerEpisode) {
         super(name, releaseYear, includedOnPlan, sumOfRates, totalOfRates, durationInMin);
         this.seasons = seasons;
         this.episodesBySeason = episodesBySeason;
@@ -49,8 +49,8 @@ public class Series extends Title implements Classificable {
     }
 
     @Override
-    public int getDurationInMin () {
-        return (seasons * episodesBySeason * minPerEpisode);
+    public String getDurationInMin () {
+        return String.valueOf(seasons * episodesBySeason * minPerEpisode);
     }
 
     @Override

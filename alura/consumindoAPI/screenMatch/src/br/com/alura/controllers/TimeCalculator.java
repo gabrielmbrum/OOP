@@ -10,6 +10,6 @@ public class TimeCalculator {
     }
 
     public void include (Title t) {
-        totalTime += t.getDurationInMin();
+        totalTime += Integer.parseInt(t.getDurationInMin());
     }
 }
